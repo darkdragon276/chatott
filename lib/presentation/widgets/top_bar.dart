@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
-  const TopBar({super.key});
+  const TopBar({Key? key});
 
   @override
   State<TopBar> createState() => _TopBarState();
@@ -13,8 +13,17 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        title: Text("Flutter App"));
+    return Container(
+      height: 60.0,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+            Colors.blueAccent.shade700,
+            Colors.blueAccent.shade400
+          ])),
+      child: Text(""),
+    );
   }
 }

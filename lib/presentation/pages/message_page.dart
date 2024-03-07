@@ -1,4 +1,8 @@
+import 'package:chatott/core/repositories/chat_users_repository.dart';
+import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/entities/chat_users.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -8,40 +12,7 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  final List<String> entries = <String>[
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-    'A',
-    'B',
-    'C',
-    'D',
-  ];
+  List<ChatUsers> chatUsers = ChatUsersRepository.getChatUsers();
 
   @override
   Widget build(BuildContext context) {
@@ -90,15 +61,30 @@ class _MessagePageState extends State<MessagePage> {
             children: <Widget>[
               ListView.builder(
                   padding: const EdgeInsets.all(8),
-                  itemCount: entries.length,
+                  itemCount: chatUsers.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 50,
-                      color: Colors.blueAccent[(index * 100) % 900],
-                      child: Center(child: Text('Entry ${entries[index]}')),
-                    );
+                    return ChatCard(
+                        data: ChatCardData(
+                      name: chatUsers[index].name,
+                      messageText: chatUsers[index].messageText,
+                      imageUrl: chatUsers[index].imageURL,
+                      time: chatUsers[index].time,
+                      isMessageRead: (index == 0 || index == 3) ? true : false,
+                    ));
                   }),
-              Icon(Icons.directions_transit, size: 350),
+              ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: chatUsers.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ChatCard(
+                        data: ChatCardData(
+                      name: chatUsers[index].name,
+                      messageText: chatUsers[index].messageText,
+                      imageUrl: chatUsers[index].imageURL,
+                      time: chatUsers[index].time,
+                      isMessageRead: (index == 0 || index == 3) ? true : false,
+                    ));
+                  }),
             ],
           ),
         ));
