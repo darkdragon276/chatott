@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
-  const TopBar({Key? key});
+  const TopBar({Key? key}) : super(key: key);
 
   @override
   State<TopBar> createState() => _TopBarState();

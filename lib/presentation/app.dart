@@ -1,5 +1,7 @@
 // app.dart
 import 'package:chatott/presentation/screens/home_screen.dart';
+import 'package:chatott/presentation/screens/login_screen.dart';
+import 'package:chatott/presentation/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {

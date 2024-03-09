@@ -64,13 +64,16 @@ class _MessagePageState extends State<MessagePage> {
                   itemCount: chatUsers.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ChatCard(
-                        data: ChatCardData(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                      imageUrl: chatUsers[index].imageURL,
-                      time: chatUsers[index].time,
-                      isMessageRead: (index == 0 || index == 3) ? true : false,
-                    ));
+                      data: ChatCardData(
+                        name: chatUsers[index].name,
+                        messageText: chatUsers[index].messageText,
+                        imageUrl: chatUsers[index].imageURL,
+                        time: chatUsers[index].time,
+                        isMessageRead:
+                            (index == 0 || index == 3) ? true : false,
+                      ),
+                      onTap: () {},
+                    );
                   }),
               ListView.builder(
                   padding: const EdgeInsets.all(8),
@@ -78,12 +81,14 @@ class _MessagePageState extends State<MessagePage> {
                   itemBuilder: (BuildContext context, int index) {
                     return ChatCard(
                         data: ChatCardData(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                      imageUrl: chatUsers[index].imageURL,
-                      time: chatUsers[index].time,
-                      isMessageRead: (index == 0 || index == 3) ? true : false,
-                    ));
+                          name: chatUsers[index].name,
+                          messageText: chatUsers[index].messageText,
+                          imageUrl: chatUsers[index].imageURL,
+                          time: chatUsers[index].time,
+                          isMessageRead:
+                              (index == 0 || index == 3) ? true : false,
+                        ),
+                        onTap: () {});
                   }),
             ],
           ),

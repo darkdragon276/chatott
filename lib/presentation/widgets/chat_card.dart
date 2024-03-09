@@ -1,11 +1,69 @@
 import 'package:flutter/material.dart';
 
-class ChatCard extends StatefulWidget {
+class ChatCard extends StatelessWidget {
   final ChatCardData data;
-  const ChatCard({super.key, required this.data});
+  final VoidCallback onTap;
+  const ChatCard({super.key, required this.data, required this.onTap});
 
   @override
-  State<ChatCard> createState() => _ChatCardState();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(data.imageUrl),
+                    maxRadius: 30,
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            data.name,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Text(
+                            data.messageText,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey.shade600,
+                                fontWeight: data.isMessageRead
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              data.time,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight:
+                      data.isMessageRead ? FontWeight.bold : FontWeight.normal),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class ChatCardData {
@@ -20,69 +78,4 @@ class ChatCardData {
       required this.imageUrl,
       required this.time,
       required this.isMessageRead});
-}
-
-class _ChatCardState extends State<ChatCard> {
-  void _onTap() {}
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _onTap,
-      child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(widget.data.imageUrl),
-                    maxRadius: 30,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            widget.data.name,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            widget.data.messageText,
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
-                                fontWeight: widget.data.isMessageRead
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              widget.data.time,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: widget.data.isMessageRead
-                      ? FontWeight.bold
-                      : FontWeight.normal),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
