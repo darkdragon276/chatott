@@ -1,4 +1,5 @@
 // app.dart
+import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/screens/home_screen.dart';
 import 'package:chatott/presentation/screens/login_screen.dart';
 import 'package:chatott/presentation/screens/signup_screen.dart';
@@ -11,12 +12,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const HomeScreen(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const LoginScreen(),
+          '/signup': (context) => const SignupScreen(),
+          '/home': (context) => const HomeScreen(),
+        });
   }
 }

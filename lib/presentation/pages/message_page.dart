@@ -1,8 +1,8 @@
-import 'package:chatott/core/repositories/chat_users_repository.dart';
+import 'package:chatott/domain/repositories/chat_users_repository.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/entities/chat_users.dart';
+import '../../domain/entities/chat_users.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
