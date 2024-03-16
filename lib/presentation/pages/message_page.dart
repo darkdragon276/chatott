@@ -24,7 +24,6 @@ class _MessagePageState extends State<MessagePage> {
               SliverAppBar(
                 snap: true,
                 floating: true,
-                expandedHeight: 60.0,
                 forceElevated: true,
                 backgroundColor: Colors.white,
                 bottom: PreferredSize(
@@ -37,6 +36,7 @@ class _MessagePageState extends State<MessagePage> {
                       unselectedLabelColor: Colors.grey[500],
                       labelColor: Colors.grey[800],
                       isScrollable: true,
+                      tabAlignment: TabAlignment.start,
                       tabs: [
                         Tab(
                             child: Text(
@@ -57,29 +57,12 @@ class _MessagePageState extends State<MessagePage> {
             ];
           },
           body: TabBarView(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
+            clipBehavior: Clip.none,
             children: <Widget>[
-              ListView.builder(
-                  padding: const EdgeInsets.all(8),
+              ListView.separated(
                   itemCount: chatUsers.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ChatCard(
-                      data: ChatCardData(
-                        name: chatUsers[index].name,
-                        messageText: chatUsers[index].messageText,
-                        imageUrl: chatUsers[index].imageURL,
-                        time: chatUsers[index].time,
-                        isMessageRead:
-                            (index == 0 || index == 3) ? true : false,
-                      ),
-                      onTap: () {},
-                    );
-                  }),
-              ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: chatUsers.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ChatCard(
+                  padding: EdgeInsets.all(0),
+                  itemBuilder: (BuildContext context, int index) => ChatCard(
                         data: ChatCardData(
                           name: chatUsers[index].name,
                           messageText: chatUsers[index].messageText,
@@ -88,8 +71,28 @@ class _MessagePageState extends State<MessagePage> {
                           isMessageRead:
                               (index == 0 || index == 3) ? true : false,
                         ),
-                        onTap: () {});
-                  }),
+                        onTap: () {},
+                      ),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Container(
+                        height: 1,
+                      )),
+              ListView.separated(
+                itemCount: chatUsers.length,
+                itemBuilder: (BuildContext context, int index) => ChatCard(
+                    data: ChatCardData(
+                      name: chatUsers[index].name,
+                      messageText: chatUsers[index].messageText,
+                      imageUrl: chatUsers[index].imageURL,
+                      time: chatUsers[index].time,
+                      isMessageRead: (index == 0 || index == 3) ? true : false,
+                    ),
+                    onTap: () {}),
+                separatorBuilder: (BuildContext context, int index) =>
+                    Container(
+                  height: 1,
+                ),
+              ),
             ],
           ),
         ));

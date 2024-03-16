@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child = MessagePage();
     }
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: TopBar(),
       body: SizedBox.expand(child: child),
       bottomNavigationBar: BottomNavigationBar(
