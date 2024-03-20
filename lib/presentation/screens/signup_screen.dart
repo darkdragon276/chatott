@@ -30,159 +30,312 @@ class _SignupScreenState extends State<SignupScreen> {
           height: MediaQuery.of(context).size.height - 50,
           width: double.infinity,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  const SizedBox(height: 60.0),
-                  const Text(
-                    "Sign up",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Create your account",
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  )
-                ],
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _header(),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    if (constraints.maxWidth > 600) {
+                      return _inputFieldWeb(context);
+                    } else {
+                      return _inputField(context);
+                    }
+                  },
+                ),
+                _footer(context)
+              ]),
+        ),
+      ),
+    );
+  }
+
+  Row _footer(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        const Text("Already have an account?"),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              "Login",
+              style: TextStyle(color: Colors.blueAccent),
+            ))
+      ],
+    );
+  }
+
+  Column _inputField(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        TextField(
+          decoration: InputDecoration(
+              hintText: "Username",
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: BorderSide.none),
+              fillColor: Colors.blueAccent.withOpacity(0.1),
+              filled: true,
+              prefixIcon: const Icon(Icons.person)),
+          controller: _usernameController,
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          decoration: InputDecoration(
+              hintText: "Email",
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: BorderSide.none),
+              fillColor: Colors.blueAccent.withOpacity(0.1),
+              filled: true,
+              prefixIcon: const Icon(Icons.email)),
+          controller: _emailController,
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Password",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+                borderSide: BorderSide.none),
+            fillColor: Colors.blueAccent.withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.password),
+          ),
+          obscureText: true,
+          controller: _passwordController,
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Confirm Password",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+                borderSide: BorderSide.none),
+            fillColor: Colors.blueAccent.withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.password),
+          ),
+          obscureText: true,
+          controller: _confirmPasswordController,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () =>
+              _signUp(context, _emailController.text, _passwordController.text),
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: Colors.blueAccent,
+          ),
+          child: const Text(
+            "Sign up",
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        const Center(child: Text("Or")),
+        Container(
+          height: 45,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+              color: Colors.blueAccent,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(0, 1), // changes position of shadow
               ),
-              Column(
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: "Username",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: Colors.blueAccent.withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.person)),
-                    controller: _usernameController,
+            ],
+          ),
+          child: TextButton(
+            onPressed: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 30.0,
+                  width: 30.0,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                        image: NetworkImage(
+                            "https://picsum.photos/id/123/200/200"),
+                        fit: BoxFit.cover),
+                    shape: BoxShape.circle,
                   ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: "Email",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: Colors.blueAccent.withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.email)),
-                    controller: _emailController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          borderSide: BorderSide.none),
-                      fillColor: Colors.blueAccent.withOpacity(0.1),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.password),
-                    ),
-                    obscureText: true,
-                    controller: _passwordController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "Confirm Password",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          borderSide: BorderSide.none),
-                      fillColor: Colors.blueAccent.withOpacity(0.1),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.password),
-                    ),
-                    obscureText: true,
-                    controller: _confirmPasswordController,
-                  ),
-                ],
-              ),
-              Container(
-                  padding: const EdgeInsets.only(top: 3, left: 3),
-                  child: ElevatedButton(
-                    onPressed: () => _signUp(context, _emailController.text,
-                        _passwordController.text),
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.blueAccent,
-                    ),
-                    child: const Text(
-                      "Sign up",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )),
-              const Center(child: Text("Or")),
-              Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
+                ),
+                const SizedBox(width: 18),
+                const Text(
+                  "Sign In with Google",
+                  style: TextStyle(
+                    fontSize: 16,
                     color: Colors.blueAccent,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: const Offset(0, 1), // changes position of shadow
-                    ),
-                  ],
                 ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 30.0,
-                        width: 30.0,
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                              image: NetworkImage(
-                                  "https://picsum.photos/id/123/200/200"),
-                              fit: BoxFit.cover),
-                          shape: BoxShape.circle,
-                        ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _inputFieldWeb(context) {
+    return SizedBox(
+      width: 500,
+      child: Card.outlined(
+        shape: BeveledRectangleBorder(),
+        elevation: 10,
+        margin: EdgeInsets.all(10),
+        surfaceTintColor: Colors.white,
+        child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                      hintText: "Username",
+                      fillColor: Colors.white,
+                      filled: true,
+                      prefixIcon: const Icon(Icons.person),
                       ),
-                      const SizedBox(width: 18),
-                      const Text(
-                        "Sign In with Google",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.blueAccent,
+                      style: TextStyle(
+                          fontSize: 15,
                         ),
+                  controller: _usernameController,
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                      hintText: "Email",
+                      fillColor: Colors.white,
+                      filled: true,
+                      prefixIcon: const Icon(Icons.email)
+                      ),
+                      style: TextStyle(
+                          fontSize: 15,
+                          ),
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    fillColor: Colors.white,
+                    filled: true,
+                    prefixIcon: const Icon(Icons.password),
+                  ),
+                  style: TextStyle(
+                          fontSize: 15,
+                          ),
+                  obscureText: true,
+                  controller: _passwordController,
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Confirm Password",
+                    fillColor: Colors.white,
+                      filled: true,
+                    prefixIcon: const Icon(Icons.password),
+                  ),
+                  style: TextStyle(
+                          fontSize: 15,
+                          ),
+                  obscureText: true,
+                  controller: _confirmPasswordController,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _signUp(
+                      context, _emailController.text, _passwordController.text),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: Colors.blueAccent,
+                    fixedSize: Size.fromHeight(45)
+                  ),
+                  child: const Text(
+                    "Sign up",
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ),
+                const Center(child: Text("Or")),
+                Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.blueAccent,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset:
+                            const Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 30.0,
+                          width: 30.0,
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                                image: NetworkImage(
+                                    "https://picsum.photos/id/123/200/200"),
+                                fit: BoxFit.cover),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 18),
+                        const Text(
+                          "Sign In with Google",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text("Already have an account?"),
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.blueAccent),
-                      ))
-                ],
-              )
-            ],
+              ],
+            )
+          ),
+      ),
+    );
+  }
+
+  Column _header() {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 60.0),
+        const Text(
+          "Sign up",
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          "Create your account",
+          style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+        )
+      ],
     );
   }
 
