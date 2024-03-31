@@ -26,7 +26,7 @@ class ChatBoxScreen extends StatefulWidget {
 class _ChatBoxScreenState extends State<ChatBoxScreen> {
   List<types.Message> _messages = [];
   final _user = const types.User(
-    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
+    id: '1',
   );
   String conversationId = '';
 

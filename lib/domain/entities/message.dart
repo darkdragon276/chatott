@@ -5,7 +5,7 @@ class Message {
   final Sender sender;
   final String content;
   final String status;
-  final String lastTime;
+  final int lastTime;
 
   const Message({
     required this.id,
@@ -29,7 +29,7 @@ class Message {
     sender: Sender(id: '', lastName: '', firstName: '', avatar: ''),
     content: '',
     status: '',
-    lastTime: '',
+    lastTime: 0,
   );
 
   // An entity can be an object with methods, or it can be a set of
@@ -43,12 +43,15 @@ class Message {
         sender.avatar,
         content,
         status,
-        lastTime
+        lastTime.toString(),
       ];
 
   types.TextMessage toTextMessage() {
     return types.TextMessage(
-        author: sender.toChatTypeUser(), id: id, text: content);
+        author: sender.toChatTypeUser(),
+        id: id,
+        text: content,
+        createdAt: lastTime);
   }
 }
 

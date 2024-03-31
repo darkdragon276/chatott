@@ -16,7 +16,7 @@ class MessageDataSourceImpl {
       ),
       content: 'loremislum sfs $index fsfsfs',
       status: 'read',
-      lastTime: 'March $index',
+      lastTime: 1655648403000 + index * 1000000000,
     ),
   );
 
@@ -31,7 +31,7 @@ class MessageDataSourceImpl {
       ),
       content: message,
       status: 'read',
-      lastTime: 'March',
+      lastTime: 1655648403000,
     );
     fakeListMessage.add(newMessage);
   }
