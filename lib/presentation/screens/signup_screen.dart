@@ -1,4 +1,3 @@
-import 'package:chatott/assets/assets.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/repositories/auth_repository_impl.dart';

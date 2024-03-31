@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:chatott/data/models/message_model.dart';
-import 'package:chatott/domain/entities/message.dart';
 
 class MessageDataSourceImpl {
   static List<MessageModel> fakeListMessage = List.generate(

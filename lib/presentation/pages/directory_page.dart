@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DirectoryPage extends StatefulWidget {
   const DirectoryPage({super.key});
@@ -110,7 +108,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
             ],
           ),
         ));
-    ;
   }
 
   Widget _buildFilledIcon(IconData iconData) {
