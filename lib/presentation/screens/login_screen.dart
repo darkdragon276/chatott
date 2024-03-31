@@ -2,8 +2,8 @@ import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/repositories/auth_repository_impl.dart';
 import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repositories.dart';
-import 'package:chatott/domain/use_cases/sign_in_use_case.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
+import 'package:chatott/domain/use_cases/sign_in_uc.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {

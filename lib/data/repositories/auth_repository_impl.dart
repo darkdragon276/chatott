@@ -1,6 +1,6 @@
 import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
 import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repositories.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;

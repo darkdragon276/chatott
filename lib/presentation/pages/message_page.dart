@@ -2,7 +2,7 @@ import 'package:chatott/data/data_sources/conversation_data_source_impl.dart';
 import 'package:chatott/data/repositories/conversation_repository_impl.dart';
 import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/domain/repositories/conversation_repository.dart';
-import 'package:chatott/domain/use_cases/stream_conversation_use_case.dart';
+import 'package:chatott/domain/use_cases/stream_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 
@@ -149,7 +149,10 @@ class _MessagePageState extends State<MessagePage> {
                           isMessageRead:
                               (index == 0 || index == 3) ? true : false,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, '/chat',
+                              arguments: conversations[index].id);
+                        },
                       ),
                   separatorBuilder: (BuildContext context, int index) =>
                       Container(

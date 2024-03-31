@@ -1,4 +1,4 @@
-import 'package:chatott/domain/repositories/auth_repositories.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class SignOutUseCase {
   final AuthRepository authRepository;

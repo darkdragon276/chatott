@@ -6,7 +6,7 @@ class ConversationDataSourceImpl {
   static List<ConversationModel> fakeListConversation = List.generate(
     10,
     (index) => ConversationModel(
-      id: 'id$index',
+      id: '$index',
       name: 'name$index',
       status: 'status$index',
       lastTime: '11PM$index',

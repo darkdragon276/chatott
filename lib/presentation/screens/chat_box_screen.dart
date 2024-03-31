@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chatott/data/data_sources/message_data_source_impl.dart';
+import 'package:chatott/data/repositories/message_repository_impl.dart';
+import 'package:chatott/domain/use_cases/stream_get_conversation_message_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -25,11 +28,11 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
   );
+  String conversationId = '';
 
   @override
   void initState() {
     super.initState();
-    _loadMessages();
   }
 
   void _addMessage(types.Message message) {
@@ -198,36 +201,46 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     _addMessage(textMessage);
   }
 
-  void _loadMessages() async {
-    final response = await rootBundle.loadString('./lib/assets/messages.json');
-    final messages = (jsonDecode(response) as List)
-        .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
-        .toList();
-
-    setState(() {
-      _messages = messages;
+  void _loadMessages(String conversationId) async {
+    if (conversationId == '') return;
+    final dataSource = MessageDataSourceImpl();
+    final repository = MessageRepositoryImpl(dataSource: dataSource);
+    StreamGetConversationMessageUC(repository)
+        .call(conversationId)
+        .map((message) => message.toTextMessage())
+        .toList()
+        .then((value) {
+      final messages = value.toList();
+      setState(() {
+        _messages = messages;
+      });
     });
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Chat(
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
-          theme: const DefaultChatTheme(
-            seenIcon: Text(
-              'read',
-              style: TextStyle(
-                fontSize: 10.0,
-              ),
+  Widget build(BuildContext context) {
+    conversationId = ModalRoute.of(context)!.settings.arguments as String;
+    _loadMessages(conversationId);
+
+    return Scaffold(
+      body: Chat(
+        messages: _messages,
+        onAttachmentPressed: _handleAttachmentPressed,
+        onMessageTap: _handleMessageTap,
+        onPreviewDataFetched: _handlePreviewDataFetched,
+        onSendPressed: _handleSendPressed,
+        showUserAvatars: true,
+        showUserNames: true,
+        user: _user,
+        theme: const DefaultChatTheme(
+          seenIcon: Text(
+            'read',
+            style: TextStyle(
+              fontSize: 10.0,
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

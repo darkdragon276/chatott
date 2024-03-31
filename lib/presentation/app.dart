@@ -22,6 +22,7 @@ class App extends StatelessWidget {
           '/': (context) => const LoginScreen(),
           '/signup': (context) => const SignupScreen(),
           '/home': (context) => const HomeScreen(),
+          '/chat': (context) => const ChatBoxScreen(),
         });
   }
 }

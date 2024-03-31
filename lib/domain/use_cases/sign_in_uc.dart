@@ -1,5 +1,5 @@
 import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repositories.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class SignInUseCase {
   final AuthRepository repository;
