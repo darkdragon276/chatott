@@ -9,8 +9,8 @@ class StreamConversationUseCase {
   Stream<Conversation> call() {
     try {
       return repository.conversation;
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

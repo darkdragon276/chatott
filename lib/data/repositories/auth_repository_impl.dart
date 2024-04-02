@@ -27,11 +27,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthUser> signIn({
-    required String email,
+    required String id,
     required String password,
   }) async {
-    final authModel = await remoteDataSource.signInWithEmailAndPassword(
-      email: email,
+    final authModel = await remoteDataSource.signInWithIdAndPassword(
+      id: id,
       password: password,
     );
     return authModel.toEntity();

@@ -41,7 +41,7 @@ class MessageDataSourceImpl {
 
   Stream<MessageModel> getConversationMessage(String conversationId) {
     if (conversationId == "1") {
-      return Stream.fromIterable(fakeListMessage);
+      return Stream.fromIterable(fakeListMessage.reversed);
     } else {
       return Stream.empty();
     }

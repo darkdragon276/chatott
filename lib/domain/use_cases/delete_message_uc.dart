@@ -10,10 +10,8 @@ class DeleteMessageUC {
       return await repository.deleteMessage(
         messageId: messageId,
       );
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

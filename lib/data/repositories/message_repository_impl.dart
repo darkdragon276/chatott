@@ -11,38 +11,20 @@ class MessageRepositoryImpl implements MessageRepository {
 
   @override
   Stream<Message> getConservationMessage({required String conversationId}) {
-    try {
-      final messages = dataSource.getConversationMessage(conversationId);
-      return messages;
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
-    }
+    final messages = dataSource.getConversationMessage(conversationId);
+    return messages;
   }
 
   @override
   Future<void> sendMessage(
       {required String conversationId, required String message}) async {
-    try {
-      return await dataSource.sendMessage(message, conversationId);
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
-    }
+    return await dataSource.sendMessage(message, conversationId);
   }
 
   @override
   Future<void> deleteMessage({required String messageId}) async {
-    try {
-      return await dataSource.deleteMessage(
-        messageId,
-      );
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
-    }
+    return await dataSource.deleteMessage(
+      messageId,
+    );
   }
 }

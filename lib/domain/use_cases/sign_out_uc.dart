@@ -8,8 +8,8 @@ class SignOutUseCase {
   Future<void> call() async {
     try {
       await authRepository.signOut();
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -53,6 +53,21 @@ class Message {
         text: content,
         createdAt: lastTime);
   }
+
+  static Message fromTextMessage(types.TextMessage message) {
+    return Message(
+      id: message.id,
+      sender: Sender(
+        id: message.author.id,
+        lastName: message.author.lastName!,
+        firstName: message.author.firstName!,
+        avatar: message.author.imageUrl!,
+      ),
+      content: message.text,
+      status: 'read',
+      lastTime: message.createdAt!,
+    );
+  }
 }
 
 class Sender {

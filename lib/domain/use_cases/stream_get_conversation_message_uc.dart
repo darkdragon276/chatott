@@ -9,10 +9,8 @@ class StreamGetConversationMessageUC {
   Stream<Message> call(String conversationId) {
     try {
       return repository.getConservationMessage(conversationId: conversationId);
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

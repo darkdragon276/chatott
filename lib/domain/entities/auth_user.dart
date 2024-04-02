@@ -1,5 +1,5 @@
 class AuthUser {
-  final String id;
+  final int id;
   final String email;
   final String? name;
   final String? photoURL;
@@ -21,7 +21,7 @@ class AuthUser {
   int get hashCode => id.hashCode;
 
   static const AuthUser empty = AuthUser(
-    id: '',
+    id: -1,
     name: '',
     email: '',
     photoURL: '',
@@ -31,5 +31,5 @@ class AuthUser {
   // data structures and functions.
   bool get isEmpty => this == AuthUser.empty;
 
-  List<String?> get props => [id, name, email, photoURL];
+  List<Object?> get props => [id, name, email, photoURL];
 }

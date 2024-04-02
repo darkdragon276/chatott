@@ -9,20 +9,18 @@ class SignInUseCase {
   Future<AuthUser> call(SignInParams params) async {
     try {
       return await repository.signIn(
-        email: params.email,
+        id: params.id,
         password: params.password,
       );
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }
 
 class SignInParams {
-  final String email;
+  final String id;
   final String password;
 
-  SignInParams({required this.email, required this.password});
+  SignInParams({required this.id, required this.password});
 }

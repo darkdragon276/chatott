@@ -10,10 +10,8 @@ class DeleteConversationUseCase {
       return await repository.deleteConversation(
         conversationId: conversationId,
       );
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

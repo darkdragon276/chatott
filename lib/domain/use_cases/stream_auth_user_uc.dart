@@ -9,8 +9,8 @@ class StreamAuthUserUseCase {
   Stream<AuthUser> call() {
     try {
       return authRepository.authUser;
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

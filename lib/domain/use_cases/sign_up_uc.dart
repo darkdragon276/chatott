@@ -13,10 +13,8 @@ class SignUpUseCase {
         password: params.password,
       );
       return authUser;
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

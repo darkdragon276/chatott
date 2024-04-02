@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:chatott/data/data_sources/message_data_source_impl.dart';
 import 'package:chatott/data/repositories/message_repository_impl.dart';
+import 'package:chatott/domain/entities/message.dart' as entity;
+import 'package:chatott/domain/use_cases/send_message_uc.dart';
 import 'package:chatott/domain/use_cases/stream_get_conversation_message_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -23,60 +25,62 @@ class ChatBoxScreen extends StatefulWidget {
 
 class _ChatBoxScreenState extends State<ChatBoxScreen> {
   List<types.Message> _messages = [];
-  final _user = const types.User(
+  final entity.Sender _sender = entity.Sender(
     id: '1',
+    lastName: 'Doe',
+    firstName: 'John',
+    avatar: 'https://ui-avatars.com/api/?name=John+Doe',
   );
-  String conversationId = '';
+  String _conversationId = '';
+  late MessageDataSourceImpl _dataSource;
+  late MessageRepositoryImpl _repository;
 
   @override
   void initState() {
     super.initState();
+    _dataSource = MessageDataSourceImpl();
+    _repository = MessageRepositoryImpl(dataSource: _dataSource);
   }
 
   void _addMessage(types.Message message) {
     setState(() {
-      _messages.insert(0, message);
+      _messages.insert(0, message); 
     });
   }
 
   void _handleAttachmentPressed() {
     showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) => SafeArea(
-        child: SizedBox(
-          height: 144,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleImageSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Photo'),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('File'),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancel'),
-                ),
-              ),
-            ],
-          ),
+      builder: (BuildContext context) => SizedBox(
+        height: 144,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            ListTile(
+              tileColor: Colors.blue[100],
+              leading: const Icon(Icons.photo),
+              title: const Text('Photo'),
+              onTap: () {
+                Navigator.pop(context);
+                _handleImageSelection();
+              },
+            ),
+            ListTile(
+              tileColor: Colors.blue[100],
+              leading: const Icon(Icons.insert_drive_file),
+              title: const Text('File'),
+              onTap: () {
+                Navigator.pop(context);
+                _handleFileSelection();
+              },
+            ),
+            ListTile(
+              tileColor: Colors.blue[100],
+              leading: const Icon(Icons.close),
+              title: const Text('Cancel'),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
         ),
       ),
     );
@@ -89,7 +93,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
     if (result != null && result.files.single.path != null) {
       final message = types.FileMessage(
-        author: _user,
+        author: _sender.toChatTypeUser(),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         id: const Uuid().v4(),
         mimeType: lookupMimeType(result.files.single.path!),
@@ -114,7 +118,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
       final image = await decodeImageFromList(bytes);
 
       final message = types.ImageMessage(
-        author: _user,
+        author: _sender.toChatTypeUser(),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         height: image.height.toDouble(),
         id: const Uuid().v4(),
@@ -190,21 +194,19 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
   void _handleSendPressed(types.PartialText message) {
     final textMessage = types.TextMessage(
-      author: _user,
+      author: _sender.toChatTypeUser(),
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
       text: message.text,
     );
-
+    SendMessageUC(_repository).call(_conversationId, message.text);
     _addMessage(textMessage);
   }
 
-  void _loadMessages(String conversationId) async {
-    if (conversationId == '') return;
-    final dataSource = MessageDataSourceImpl();
-    final repository = MessageRepositoryImpl(dataSource: dataSource);
-    StreamGetConversationMessageUC(repository)
-        .call(conversationId)
+  void _loadMessages(String _conversationId) async {
+    if (_conversationId == '') return;
+    StreamGetConversationMessageUC(_repository)
+        .call(_conversationId)
         .map((message) => message.toTextMessage())
         .toList()
         .then((value) {
@@ -217,8 +219,8 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
   @override
   Widget build(BuildContext context) {
-    conversationId = ModalRoute.of(context)!.settings.arguments as String;
-    _loadMessages(conversationId);
+    _conversationId = ModalRoute.of(context)!.settings.arguments as String;
+    _loadMessages(_conversationId);
 
     return Scaffold(
       body: Chat(
@@ -229,8 +231,17 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
         onSendPressed: _handleSendPressed,
         showUserAvatars: true,
         showUserNames: true,
-        user: _user,
+        user: _sender.toChatTypeUser(),
         theme: const DefaultChatTheme(
+          inputBackgroundColor: Colors.white,
+          backgroundColor: Color.fromRGBO(187, 222, 251, 1),
+          attachmentButtonIcon: Icon(
+            Icons.more_horiz_outlined,
+            color: Color.fromRGBO(66, 66, 66, 1),
+          ),
+          inputTextColor: Colors.grey,
+          primaryColor: Color.fromARGB(255, 68, 172, 241),
+          secondaryColor: Colors.white,
           seenIcon: Text(
             'read',
             style: TextStyle(

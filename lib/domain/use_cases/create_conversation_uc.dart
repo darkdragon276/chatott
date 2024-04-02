@@ -12,10 +12,8 @@ class CreateConversationUseCase {
         listUserId: params.listUserId,
         conversationName: params.conversationName,
       );
-    } on ArgumentError catch (error) {
-      throw Exception(error);
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

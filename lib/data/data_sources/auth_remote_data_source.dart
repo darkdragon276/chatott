@@ -8,8 +8,8 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
-  Future<AuthUserModel> signInWithEmailAndPassword({
-    required String email,
+  Future<AuthUserModel> signInWithIdAndPassword({
+    required String id,
     required String password,
   });
 
