@@ -1,34 +1,35 @@
-import 'dart:collection';
 import 'dart:convert';
 
-import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
-import 'package:chatott/data/models/auth_user_model.dart';
+import 'package:chatott/data/models/user_model.dart';
 import 'package:http/http.dart';
 
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  static const fakeUser = AuthUserModel(
-    id: 1000,
-    email: 'fake-user-email',
-    name: 'fake-user-name',
-  );
+class AuthRemoteDataSourceImpl {
   static Client _http = Client();
+  static UserModel _storeUser = UserModel.empty;
 
-  @override
-  Stream<AuthUserModel?> get user {
-    return Stream.value(fakeUser);
+  UserModel get user {
+    return _storeUser;
   }
 
-  @override
-  Future<AuthUserModel> signUpWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
-    return fakeUser;
+  Future<UserModel> signUp(UserModel user) async {
+    Response resp = await _http.post(
+        Uri.parse('http://localhost:8080/kientrucphanmem/public/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(user.toJson()));
+    if (resp.statusCode == 200) {
+      print('success');
+      print(user.toJson());
+      _storeUser = user;
+      return user;
+    }
+    print("fail");
+    throw Exception('Failed to sign up');
   }
 
-  @override
-  Future<AuthUserModel> signInWithIdAndPassword({
-    required String id,
+  Future<UserModel> signIn({
+    required String username,
     required String password,
   }) async {
     print("singin");
@@ -37,25 +38,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body:
-            jsonEncode(<String, String>{"username": id, "password": password}));
+        body: jsonEncode(
+            <String, String>{"username": username, "password": password}));
 
     if (resp.statusCode == 200) {
-      print("success");
       final json = jsonDecode(resp.body);
-      print(json['data']);
-      print(json['data']['id']);
-      final user = AuthUserModel(
-          id: json['data']['id'],
-          email: json['data']['email'],
-          name: json['data']['lastName']);
-      return user;
+      final Map<String, dynamic> data = Map.castFrom(json['data']);
+      print(data);
+      _storeUser = UserModel.fromJson(data);
+      return _storeUser;
     }
     print("fail");
     throw Exception('Failed to sign in');
   }
 
-  @override
   Future<void> signOut() async {
     throw UnimplementedError();
   }

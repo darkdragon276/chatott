@@ -1,4 +1,4 @@
-import 'package:chatott/domain/entities/auth_user.dart';
+import 'package:chatott/domain/entities/user.dart';
 import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class SignInUseCase {
@@ -6,10 +6,10 @@ class SignInUseCase {
 
   SignInUseCase({required this.repository});
 
-  Future<AuthUser> call(SignInParams params) async {
+  Future<User> call(SignInParams params) async {
     try {
       return await repository.signIn(
-        id: params.id,
+        username: params.username,
         password: params.password,
       );
     } catch (e) {
@@ -19,8 +19,8 @@ class SignInUseCase {
 }
 
 class SignInParams {
-  final String id;
+  final String username;
   final String password;
 
-  SignInParams({required this.id, required this.password});
+  SignInParams({required this.username, required this.password});
 }

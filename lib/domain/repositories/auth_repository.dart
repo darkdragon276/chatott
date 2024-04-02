@@ -1,15 +1,12 @@
-import 'package:chatott/domain/entities/auth_user.dart';
+import 'package:chatott/domain/entities/user.dart';
 
 abstract class AuthRepository {
-  Stream<AuthUser> get authUser;
+  User get storeUser;
 
-  Future<AuthUser> signUp({
-    required String email,
-    required String password,
-  });
+  Future<User> signUp(User user);
 
-  Future<AuthUser> signIn({
-    required String id,
+  Future<User> signIn({
+    required String username,
     required String password,
   });
 

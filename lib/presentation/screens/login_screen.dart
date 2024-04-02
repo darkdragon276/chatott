@@ -1,8 +1,6 @@
-import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/repositories/auth_repository_impl.dart';
-import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repository.dart';
+import 'package:chatott/domain/entities/user.dart';
 import 'package:chatott/domain/use_cases/sign_in_uc.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +12,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _idController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  var _authUser = AuthUser.empty;
+  late User _authUser;
+  late AuthRemoteDataSourceImpl _dataSource;
+  late AuthRepositoryImpl _repository;
+
+  @override
+  void initState() {
+    super.initState();
+    _dataSource = AuthRemoteDataSourceImpl();
+    _repository = AuthRepositoryImpl(remoteDataSource: _dataSource);
+    _authUser = _repository.storeUser;
+    _usernameController.text = _authUser.username;
+  }
 
   @override
   void dispose() {
-    _idController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -41,6 +50,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _refresh() {
+    setState(() {
+      _authUser = _repository.storeUser;
+      _usernameController.text = _authUser.username;
+    });
   }
 
   _header(context) {
@@ -68,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fillColor: Colors.blueAccent.withOpacity(0.1),
               filled: true,
               prefixIcon: const Icon(Icons.person)),
-          controller: _idController,
+          controller: _usernameController,
         ),
         const SizedBox(height: 10),
         TextField(
@@ -86,8 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 10),
         ElevatedButton(
-          onPressed: () =>
-              _login(context, _idController.text, _passwordController.text),
+          onPressed: () => _login(
+              context, _usernameController.text, _passwordController.text),
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -119,7 +135,9 @@ class _LoginScreenState extends State<LoginScreen> {
         const Text("Dont have an account? "),
         TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/signup');
+              Navigator.pushNamed(context, '/signup').then((_) {
+                _refresh();
+              });
             },
             child: const Text(
               "Sign Up",
@@ -129,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _login(context, id, password) async {
+  void _login(context, username, password) async {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       content: const Text('Invalid username or password!'),
@@ -137,13 +155,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (_validatePassword(context, password)) {
       try {
-        final AuthRemoteDataSource dataSource = AuthRemoteDataSourceImpl();
-        final AuthRepository repository =
-            AuthRepositoryImpl(remoteDataSource: dataSource);
-        _authUser = await SignInUseCase(repository: repository)
-            .call(SignInParams(id: id, password: password));
+        _authUser = await SignInUseCase(repository: _repository)
+            .call(SignInParams(username: username, password: password));
         // route to home screen
-        if (_authUser != AuthUser.empty) {
+        if (_authUser != User.empty) {
           Navigator.pushNamed(context, '/home');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

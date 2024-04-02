@@ -1,8 +1,6 @@
-import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/repositories/auth_repository_impl.dart';
-import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repository.dart';
+import 'package:chatott/domain/entities/user.dart';
 import 'package:chatott/domain/use_cases/sign_up_uc.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +13,20 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
-  var _authUser = AuthUser.empty;
+  late User _authUser;
+  final AuthRemoteDataSourceImpl _dataSource = AuthRemoteDataSourceImpl();
+  late final AuthRepositoryImpl _repository;
+
+  @override
+  void initState() {
+    _repository = AuthRepositoryImpl(remoteDataSource: _dataSource);
+    _authUser = User.empty;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,6 @@ class _SignupScreenState extends State<SignupScreen> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          height: MediaQuery.of(context).size.height - 50,
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -79,6 +86,18 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 20),
                   TextField(
                     decoration: InputDecoration(
+                        hintText: "Phone Number",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none),
+                        fillColor: Colors.blueAccent.withOpacity(0.1),
+                        filled: true,
+                        prefixIcon: const Icon(Icons.phone)),
+                    controller: _phoneController,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
                       hintText: "Password",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
@@ -104,13 +123,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     obscureText: true,
                     controller: _confirmPasswordController,
                   ),
+                  const SizedBox(height: 50),
                 ],
               ),
               Container(
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: ElevatedButton(
-                    onPressed: () => _signUp(context, _emailController.text,
-                        _passwordController.text),
+                    onPressed: () => _signUp(
+                        context,
+                        _usernameController.text,
+                        _passwordController.text,
+                        _emailController.text,
+                        _phoneController.text,
+                        "",
+                        ""),
                     style: ElevatedButton.styleFrom(
                       shape: const StadiumBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -185,7 +211,8 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  void _signUp(context, email, password) async {
+  void _signUp(context, username, password, email, phoneNumber, firstName,
+      lastName) async {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       content: const Text('Invalid email address or password!'),
@@ -194,13 +221,16 @@ class _SignupScreenState extends State<SignupScreen> {
     if (_validateEmail(context, email)) {
       if (_validatePassword(context, password)) {
         try {
-          final AuthRemoteDataSource dataSource = AuthRemoteDataSourceImpl();
-          final AuthRepository repository =
-              AuthRepositoryImpl(remoteDataSource: dataSource);
-          _authUser = await SignUpUseCase(authRepository: repository)
-              .call(SignUpParams(email: email, password: password));
+          _authUser = await SignUpUseCase(authRepository: _repository).call(
+              User(
+                  username: username,
+                  password: password,
+                  email: email,
+                  phoneNumber: phoneNumber,
+                  firstName: firstName,
+                  lastName: lastName));
           // route to home screen
-          if (_authUser != AuthUser.empty) {
+          if (_authUser != User.empty) {
             Navigator.pop(context);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
