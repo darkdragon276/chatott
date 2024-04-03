@@ -6,22 +6,11 @@ class CreateConversationUseCase {
 
   CreateConversationUseCase(this.repository);
 
-  Future<Conversation> call(CreateConversationParams params) async {
+  Future<Conversation> call(String userJWT) async {
     try {
-      return await repository.createConversation(
-        listUserId: params.listUserId,
-        conversationName: params.conversationName,
-      );
+      return await repository.createConversation(userJWT);
     } catch (e) {
       rethrow;
     }
   }
-}
-
-class CreateConversationParams {
-  final List<String> listUserId;
-  final String conversationName;
-
-  CreateConversationParams(
-      {required this.listUserId, required this.conversationName});
 }

@@ -1,14 +1,14 @@
 class Conversation {
-  final String id;
-  final String name;
-  final String status;
-  final String lastTime;
+  final int id;
+  final List<String> listUsername;
+  final String? status;
+  final int createAt;
 
   const Conversation({
     required this.id,
-    required this.name,
-    required this.status, // read, unread
-    required this.lastTime,
+    required this.listUsername,
+    this.status, // read, unread
+    required this.createAt,
   });
 
   // compare with id object.
@@ -23,15 +23,13 @@ class Conversation {
   int get hashCode => id.hashCode;
 
   static const Conversation empty = Conversation(
-    id: '',
-    name: '',
-    status: '',
-    lastTime: '',
+    id: -1,
+    listUsername: [],
+    status: 'unread',
+    createAt: 1712109344,
   );
 
   // An entity can be an object with methods, or it can be a set of
   // data structures and functions.
   bool get isEmpty => this == Conversation.empty;
-
-  List<String?> get props => [id, name, status, lastTime];
 }

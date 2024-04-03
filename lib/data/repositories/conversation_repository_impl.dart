@@ -18,14 +18,9 @@ class ConversationRepositoryImpl implements ConversationRepository {
   }
 
   @override
-  Future<Conversation> createConversation({
-    required List<String> listUserId,
-    required String conversationName,
-  }) async {
-    final conversationModel = await remoteDataSource.createConversation(
-      listUserId: listUserId,
-      conversationName: conversationName,
-    );
+  Future<Conversation> createConversation(String userJWT) async {
+    final conversationModel =
+        await remoteDataSource.createConversation(userJWT);
     return conversationModel.toEntity();
   }
 

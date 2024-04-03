@@ -142,12 +142,12 @@ class _MessagePageState extends State<MessagePage> {
                   padding: EdgeInsets.all(0),
                   itemBuilder: (BuildContext context, int index) => ChatCard(
                         data: ChatCardData(
-                          name: conversations[index].name,
+                          name: conversations[index].listUsername[1],
                           messageText: "TODO",
                           imageUrl: "https://picsum.photos/id/126/200/200",
-                          time: conversations[index].lastTime,
-                          isMessageRead:
-                              (index == 0 || index == 3) ? true : false,
+                          time: ChatCardData.fromCurrentTime(
+                              conversations[index].createAt),
+                          isMessageRead: conversations[index].status == 'read',
                         ),
                         onTap: () {
                           Navigator.pushNamed(context, '/chat',

@@ -79,4 +79,19 @@ class ChatCardData {
       required this.imageUrl,
       required this.time,
       required this.isMessageRead});
+
+  static String fromCurrentTime(int epoch) {
+    final now = DateTime.now();
+    final date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);
+    final diff = now.difference(date);
+    if (diff.inDays > 0) {
+      return '${diff.inDays} days ago';
+    } else if (diff.inHours > 0) {
+      return '${diff.inHours} hours ago';
+    } else if (diff.inMinutes > 0) {
+      return '${diff.inMinutes} minutes ago';
+    } else {
+      return 'Just now';
+    }
+  }
 }
