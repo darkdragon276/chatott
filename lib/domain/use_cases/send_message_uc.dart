@@ -5,7 +5,7 @@ class SendMessageUC {
 
   SendMessageUC(this.repository);
 
-  Future<void> call(String conversationId, String message) async {
+  Future<void> call(int conversationId, String message) async {
     try {
       return await repository.sendMessage(
         conversationId: conversationId,

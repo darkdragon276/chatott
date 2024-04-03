@@ -1,8 +1,9 @@
+import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/data_sources/conversation_data_source_impl.dart';
 import 'package:chatott/data/repositories/conversation_repository_impl.dart';
 import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/domain/repositories/conversation_repository.dart';
-import 'package:chatott/domain/use_cases/stream_conversation_uc.dart';
+import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 
@@ -72,20 +73,22 @@ class ChatUsers {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  List<ChatUsers> chatUsers = ChatUsers.getChatUsers();
-  List<Conversation> conversations = [];
+  List<ChatUsers> _chatUsers = ChatUsers.getChatUsers();
+  List<Conversation> _conversations = [];
+  late ConversationDataSourceImpl _remoteDataSource;
+  late ConversationRepository _repository;
 
   @override
   void initState() {
-    ConversationDataSourceImpl remoteDataSource = ConversationDataSourceImpl();
-    ConversationRepository repository =
-        ConversationRepositoryImpl(remoteDataSource: remoteDataSource);
-    StreamConversationUseCase(repository: repository)
-        .call()
-        .toList()
+    _remoteDataSource = ConversationDataSourceImpl();
+    _repository =
+        ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
+    GetAllConversationUseCase(repository: _repository)
+        .call(AuthRemoteDataSourceImpl().user.jwt!)
         .then((value) {
-      conversations = value;
-      setState(() {});
+      setState(() {
+        _conversations = value;
+      });
     });
 
     super.initState();
@@ -138,20 +141,20 @@ class _MessagePageState extends State<MessagePage> {
             children: <Widget>[
               ListView.separated(
                   itemCount:
-                      conversations.isNotEmpty ? conversations.length : 1,
+                      _conversations.isNotEmpty ? _conversations.length : 1,
                   padding: EdgeInsets.all(0),
                   itemBuilder: (BuildContext context, int index) => ChatCard(
                         data: ChatCardData(
-                          name: conversations[index].listUsername[1],
+                          name: _conversations[index].listUsername[1],
                           messageText: "TODO",
                           imageUrl: "https://picsum.photos/id/126/200/200",
                           time: ChatCardData.fromCurrentTime(
-                              conversations[index].createAt),
-                          isMessageRead: conversations[index].status == 'read',
+                              _conversations[index].createAt),
+                          isMessageRead: _conversations[index].status == 'read',
                         ),
                         onTap: () {
                           Navigator.pushNamed(context, '/chat',
-                              arguments: conversations[index].id);
+                              arguments: _conversations[index].id);
                         },
                       ),
                   separatorBuilder: (BuildContext context, int index) =>
@@ -159,13 +162,13 @@ class _MessagePageState extends State<MessagePage> {
                         height: 1,
                       )),
               ListView.separated(
-                itemCount: chatUsers.length,
+                itemCount: _chatUsers.length,
                 itemBuilder: (BuildContext context, int index) => ChatCard(
                     data: ChatCardData(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                      imageUrl: chatUsers[index].imageURL,
-                      time: chatUsers[index].time,
+                      name: _chatUsers[index].name,
+                      messageText: _chatUsers[index].messageText,
+                      imageUrl: _chatUsers[index].imageURL,
+                      time: _chatUsers[index].time,
                       isMessageRead: (index == 0 || index == 3) ? true : false,
                     ),
                     onTap: () {}),

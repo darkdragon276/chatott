@@ -31,7 +31,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     firstName: 'John',
     avatar: 'https://ui-avatars.com/api/?name=John+Doe',
   );
-  String _conversationId = '';
+  int _conversationId = -1;
   late MessageDataSourceImpl _dataSource;
   late MessageRepositoryImpl _repository;
 
@@ -44,7 +44,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
   void _addMessage(types.Message message) {
     setState(() {
-      _messages.insert(0, message); 
+      _messages.insert(0, message);
     });
   }
 
@@ -203,8 +203,8 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     _addMessage(textMessage);
   }
 
-  void _loadMessages(String _conversationId) async {
-    if (_conversationId == '') return;
+  void _loadMessages(int _conversationId) async {
+    if (_conversationId == -1) return;
     StreamGetConversationMessageUC(_repository)
         .call(_conversationId)
         .map((message) => message.toTextMessage())
@@ -219,7 +219,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _conversationId = ModalRoute.of(context)!.settings.arguments as String;
+    _conversationId = ModalRoute.of(context)!.settings.arguments as int;
     _loadMessages(_conversationId);
 
     return Scaffold(

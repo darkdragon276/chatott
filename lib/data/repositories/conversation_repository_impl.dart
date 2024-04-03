@@ -10,17 +10,18 @@ class ConversationRepositoryImpl implements ConversationRepository {
   });
 
   @override
-  Stream<Conversation> get conversation {
-    return remoteDataSource.conversation.map((conversationModel) =>
-        conversationModel == null
-            ? Conversation.empty
-            : conversationModel.toEntity());
+  Future<List<Conversation>> getAllConversation(String userJWT) async {
+    final listConversation = await remoteDataSource.getAllConversation(userJWT);
+    final List<Conversation> ret =
+        listConversation.map((e) => e.toEntity()).toList();
+    return ret;
   }
 
   @override
-  Future<Conversation> createConversation(String userJWT) async {
+  Future<Conversation> createConversation(
+      List<String> listUser, String conversationName) async {
     final conversationModel =
-        await remoteDataSource.createConversation(userJWT);
+        await remoteDataSource.createConversation(listUser, conversationName);
     return conversationModel.toEntity();
   }
 

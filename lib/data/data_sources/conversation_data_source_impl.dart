@@ -8,11 +8,7 @@ class ConversationDataSourceImpl {
   static Client _http = Client();
   static List<ConversationModel> _storeListConversation = [];
 
-  Stream<ConversationModel?> get conversation {
-    return Stream.fromIterable(_storeListConversation);
-  }
-
-  Future<ConversationModel> createConversation(String userJWT) async {
+  Future<List<ConversationModel>> getAllConversation(String userJWT) async {
     Response resp = await _http.get(
         Uri.parse(
             'http://localhost:8080/kientrucphanmem/user/get-all-conversation'),
@@ -20,6 +16,31 @@ class ConversationDataSourceImpl {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $userJWT',
         });
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      Iterable listJson = json['data'];
+      _storeListConversation = listJson
+          .map((conversation) =>
+              ConversationModel.fromJson(conversation['conversation']))
+          .toList();
+      print('success');
+      return _storeListConversation;
+    }
+    print("fail");
+    throw Exception('Failed to sign up');
+  }
+
+  Future<ConversationModel> createConversation(
+      List<String> listUser, String conversationName) async {
+    Response resp = await _http.post(
+        Uri.parse('http://localhost:8080/kientrucphanmem/conversation/create'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "userIdList": listUser.join(","),
+          "conversationName": conversationName
+        }));
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body);
       final conversationModel =

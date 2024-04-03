@@ -1,14 +1,14 @@
 import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/domain/repositories/conversation_repository.dart';
 
-class StreamConversationUseCase {
+class GetAllConversationUseCase {
   final ConversationRepository repository;
 
-  StreamConversationUseCase({required this.repository});
+  GetAllConversationUseCase({required this.repository});
 
-  Stream<Conversation> call() {
+  Future<List<Conversation>> call(String userJWT) {
     try {
-      return repository.conversation;
+      return repository.getAllConversation(userJWT);
     } catch (e) {
       rethrow;
     }

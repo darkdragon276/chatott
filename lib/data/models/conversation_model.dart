@@ -15,7 +15,7 @@ class ConversationModel extends Conversation {
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
       id: json['id'],
-      listUsername: List<String>.from(json['name']),
+      listUsername: json['name'].toString().split(',').toList(),
       status: json['status'],
       createAt:
           DateTime.parse(json['createdDate']).toUtc().millisecondsSinceEpoch,

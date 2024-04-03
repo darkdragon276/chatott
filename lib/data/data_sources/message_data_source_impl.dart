@@ -19,7 +19,7 @@ class MessageDataSourceImpl {
     ),
   );
 
-  Future<void> sendMessage(String message, String conversationId) async {
+  Future<void> sendMessage(String message, int conversationId) async {
     MessageModel newMessage = MessageModel(
       id: Random().nextInt(100).toString(),
       sender: SenderModel(
@@ -39,8 +39,8 @@ class MessageDataSourceImpl {
     fakeListMessage.removeWhere((element) => element.id == messageId);
   }
 
-  Stream<MessageModel> getConversationMessage(String conversationId) {
-    if (conversationId == "1") {
+  Stream<MessageModel> getConversationMessage(int conversationId) {
+    if (conversationId == 1) {
       return Stream.fromIterable(fakeListMessage.reversed);
     } else {
       return Stream.empty();

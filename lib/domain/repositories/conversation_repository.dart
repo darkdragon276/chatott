@@ -1,9 +1,10 @@
 import 'package:chatott/domain/entities/conversation.dart';
 
 abstract class ConversationRepository {
-  Stream<Conversation> get conversation;
+  Future<List<Conversation>> getAllConversation(String userJWT);
 
-  Future<Conversation> createConversation(String userJWT);
+  Future<Conversation> createConversation(
+      List<String> listUser, String conversationName);
 
   // Future<List<Messages>> getMessage({required String conversationId});
 

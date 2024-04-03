@@ -6,9 +6,10 @@ class CreateConversationUseCase {
 
   CreateConversationUseCase(this.repository);
 
-  Future<Conversation> call(String userJWT) async {
+  Future<Conversation> call(
+      List<String> listUser, String conversationName) async {
     try {
-      return await repository.createConversation(userJWT);
+      return await repository.createConversation(listUser, conversationName);
     } catch (e) {
       rethrow;
     }

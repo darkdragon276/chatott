@@ -6,7 +6,7 @@ class StreamGetConversationMessageUC {
 
   StreamGetConversationMessageUC(this.repository);
 
-  Stream<Message> call(String conversationId) {
+  Stream<Message> call(int conversationId) {
     try {
       return repository.getConservationMessage(conversationId: conversationId);
     } catch (e) {
