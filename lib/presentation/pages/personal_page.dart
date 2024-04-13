@@ -93,8 +93,7 @@ class _PersonalPageState extends State<PersonalPage> {
             leading: Icon(Icons.logout_outlined, color: Colors.blueAccent),
             title: Text('Đăng xuất'),
             onTap: () {
-              Navigator.popUntil(
-                  context, (route) => route.settings.name == "/");
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
           ),
         ],
