@@ -76,10 +76,12 @@ class _MessagePageState extends State<MessagePage> {
   List<ChatUsers> _chatUsers = ChatUsers.getChatUsers();
   List<Conversation> _conversations = [];
   late ConversationDataSourceImpl _remoteDataSource;
-  late ConversationRepository _repository;
+  late ConversationRepositoryImpl _repository;
 
   @override
   void initState() {
+    super.initState();
+    print("initState");
     _remoteDataSource = ConversationDataSourceImpl();
     _repository =
         ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
@@ -90,8 +92,6 @@ class _MessagePageState extends State<MessagePage> {
         _conversations = value;
       });
     });
-
-    super.initState();
   }
 
   @override
@@ -141,13 +141,14 @@ class _MessagePageState extends State<MessagePage> {
             children: <Widget>[
               ListView.separated(
                   itemCount:
-                      _conversations.isNotEmpty ? _conversations.length : 1,
+                      _conversations.isNotEmpty ? _conversations.length : 0,
                   padding: EdgeInsets.all(0),
                   itemBuilder: (BuildContext context, int index) => ChatCard(
                         data: ChatCardData(
                           name: _conversations[index].listUsername[1],
                           messageText: "TODO",
-                          imageUrl: "https://picsum.photos/id/126/200/200",
+                          imageUrl:
+                              "https://picsum.photos/id/${_conversations[index].id}/200/200",
                           time: ChatCardData.fromCurrentTime(
                               _conversations[index].createAt),
                           isMessageRead: _conversations[index].status == 'read',

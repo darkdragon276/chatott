@@ -1,7 +1,7 @@
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class Message {
-  final String id;
+  final int id;
   final Sender sender;
   final String content;
   final String status;
@@ -25,8 +25,8 @@ class Message {
   int get hashCode => id.hashCode;
 
   static const Message empty = Message(
-    id: '',
-    sender: Sender(id: '', lastName: '', firstName: '', avatar: ''),
+    id: -1,
+    sender: Sender(id: -1, lastName: '', firstName: '', avatar: ''),
     content: '',
     status: '',
     lastTime: 0,
@@ -36,7 +36,7 @@ class Message {
   // data structures and functions.
   bool get isEmpty => this == Message.empty;
 
-  List<String?> get props => [
+  List<Object?> get props => [
         id,
         sender.lastName,
         sender.firstName,
@@ -49,16 +49,16 @@ class Message {
   types.TextMessage toTextMessage() {
     return types.TextMessage(
         author: sender.toChatTypeUser(),
-        id: id,
+        id: id.toString(),
         text: content,
         createdAt: lastTime);
   }
 
   static Message fromTextMessage(types.TextMessage message) {
     return Message(
-      id: message.id,
+      id: int.parse(message.id),
       sender: Sender(
-        id: message.author.id,
+        id: int.parse(message.author.id),
         lastName: message.author.lastName!,
         firstName: message.author.firstName!,
         avatar: message.author.imageUrl!,
@@ -71,7 +71,7 @@ class Message {
 }
 
 class Sender {
-  final String id;
+  final int id;
   final String? email;
   final String? phone;
   final String lastName;
@@ -89,7 +89,7 @@ class Sender {
 
   types.User toChatTypeUser() {
     return types.User(
-      id: id,
+      id: id.toString(),
       firstName: firstName,
       lastName: lastName,
       imageUrl: avatar,

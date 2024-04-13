@@ -12,6 +12,21 @@ class MessageModel extends Message {
   Message toEntity() {
     return this;
   }
+
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      id: json['id'],
+      sender: SenderModel(
+        id: json['msgFrom'],
+        firstName: json['sender'],
+        lastName: json['sender'],
+        avatar: 'https://picsum.photos/id/300/200/200',
+      ),
+      content: json['content'],
+      status: 'read',
+      lastTime: json['createdDate'],
+    );
+  }
 }
 
 class SenderModel extends Sender {

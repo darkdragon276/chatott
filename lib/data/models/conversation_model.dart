@@ -17,8 +17,7 @@ class ConversationModel extends Conversation {
       id: json['id'],
       listUsername: json['name'].toString().split(',').toList(),
       status: json['status'],
-      createAt:
-          DateTime.parse(json['createdDate']).toUtc().millisecondsSinceEpoch,
+      createAt: json['createdDate'],
     );
   }
 

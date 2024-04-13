@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/data_sources/message_data_source_impl.dart';
 import 'package:chatott/data/repositories/message_repository_impl.dart';
 import 'package:chatott/domain/entities/message.dart' as entity;
@@ -17,7 +18,8 @@ import 'package:open_filex/open_filex.dart';
 import 'package:mime/mime.dart';
 
 class ChatBoxScreen extends StatefulWidget {
-  const ChatBoxScreen({super.key});
+  final int conversationId;
+  const ChatBoxScreen({super.key, required this.conversationId});
 
   @override
   State<ChatBoxScreen> createState() => _ChatBoxScreenState();
@@ -26,12 +28,13 @@ class ChatBoxScreen extends StatefulWidget {
 class _ChatBoxScreenState extends State<ChatBoxScreen> {
   List<types.Message> _messages = [];
   final entity.Sender _sender = entity.Sender(
-    id: '1',
+    id: 1,
     lastName: 'Doe',
     firstName: 'John',
     avatar: 'https://ui-avatars.com/api/?name=John+Doe',
   );
-  int _conversationId = -1;
+  late int _conversationId;
+  late int _userId;
   late MessageDataSourceImpl _dataSource;
   late MessageRepositoryImpl _repository;
 
@@ -40,6 +43,12 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     super.initState();
     _dataSource = MessageDataSourceImpl();
     _repository = MessageRepositoryImpl(dataSource: _dataSource);
+  }
+
+  @override
+  void dispose() {
+    _dataSource.disconnectSocket();
+    super.dispose();
   }
 
   void _addMessage(types.Message message) {
@@ -203,26 +212,34 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     _addMessage(textMessage);
   }
 
-  void _loadMessages(int _conversationId) async {
-    if (_conversationId == -1) return;
+  void _loadMessages(int conversationId, int userId) async {
+    if (conversationId == -1) return;
     StreamGetConversationMessageUC(_repository)
-        .call(_conversationId)
+        .call(conversationId)
         .map((message) => message.toTextMessage())
         .toList()
         .then((value) {
       final messages = value.toList();
-      setState(() {
-        _messages = messages;
-      });
+      _messages = messages;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _conversationId = ModalRoute.of(context)!.settings.arguments as int;
-    _loadMessages(_conversationId);
-
+    _conversationId = widget.conversationId;
+    _userId = AuthRemoteDataSourceImpl().user.id!;
+    _dataSource.connectSocket(_userId, _conversationId);
+    _loadMessages(_conversationId, _userId);
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        title: Text("Chat Box"),
+        centerTitle: true,
+      ),
       body: Chat(
         messages: _messages,
         onAttachmentPressed: _handleAttachmentPressed,

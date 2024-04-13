@@ -159,9 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
             .call(SignInParams(username: username, password: password));
         // route to home screen
         if (_authUser != User.empty) {
-          // subcribe to socket
-          _dataSource.connectSocket(1, 3);
-
           Navigator.pushNamed(context, '/home');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
