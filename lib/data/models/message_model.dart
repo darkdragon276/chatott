@@ -21,7 +21,7 @@ class MessageModel extends Message {
         id: json['msgFrom'],
         firstName: "",
         lastName: json['sender'],
-        avatar: 'https://picsum.photos/id/${json['id'] * 2}/200/200',
+        avatar: 'https://picsum.photos/id/${json['msgFrom'] * 2}/200/200',
       ),
       content: json['content'],
       status: 'read',

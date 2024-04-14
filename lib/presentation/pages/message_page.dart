@@ -145,10 +145,13 @@ class _MessagePageState extends State<MessagePage> {
                   padding: EdgeInsets.all(0),
                   itemBuilder: (BuildContext context, int index) => ChatCard(
                         data: ChatCardData(
-                          name: _conversations[index].listUsername[1],
-                          messageText: "TODO",
+                          name: _conversations[index].listUsername.join(", "),
+                          messageText:
+                              _conversations[index].listUsername.length > 1
+                                  ? "Group"
+                                  : "Single",
                           imageUrl:
-                              "https://picsum.photos/id/${_conversations[index].id}/200/200",
+                              "https://picsum.photos/id/${_conversations[index].id * 5}/200/200",
                           time: ChatCardData.fromCurrentTime(
                               _conversations[index].createAt),
                           isMessageRead: _conversations[index].status == 'read',
