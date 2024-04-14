@@ -1,3 +1,4 @@
+import 'package:chatott/domain/entities/user.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class Message {
@@ -6,6 +7,7 @@ class Message {
   final String content;
   final String status;
   final int lastTime;
+  final String sessionId;
 
   const Message({
     required this.id,
@@ -13,6 +15,7 @@ class Message {
     required this.content,
     required this.status, // read, unread
     required this.lastTime,
+    required this.sessionId,
   });
 
   // compare with id object.
@@ -30,6 +33,7 @@ class Message {
     content: '',
     status: '',
     lastTime: 0,
+    sessionId: '',
   );
 
   // An entity can be an object with methods, or it can be a set of
@@ -51,10 +55,11 @@ class Message {
         author: sender.toChatTypeUser(),
         id: id.toString(),
         text: content,
-        createdAt: lastTime);
+        createdAt: lastTime,
+        roomId: sessionId.toString());
   }
 
-  static Message fromTextMessage(types.TextMessage message) {
+  static Message fromTextMessage(types.TextMessage message, String sesstionId) {
     return Message(
       id: int.parse(message.id),
       sender: Sender(
@@ -66,12 +71,14 @@ class Message {
       content: message.text,
       status: 'read',
       lastTime: message.createdAt!,
+      sessionId: sesstionId,
     );
   }
 }
 
 class Sender {
   final int id;
+  final String? username;
   final String? email;
   final String? phone;
   final String lastName;
@@ -80,12 +87,23 @@ class Sender {
 
   const Sender({
     required this.id,
+    this.username,
     this.email,
     this.phone,
     required this.lastName,
     required this.firstName,
     required this.avatar,
   });
+
+  factory Sender.fromUser(User user) {
+    return Sender(
+      id: user.id!,
+      username: user.username,
+      lastName: user.lastName!,
+      firstName: user.firstName!,
+      avatar: user.photoURL!,
+    );
+  }
 
   types.User toChatTypeUser() {
     return types.User(

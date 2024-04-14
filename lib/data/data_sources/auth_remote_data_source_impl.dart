@@ -32,7 +32,7 @@ class AuthRemoteDataSourceImpl {
     required String username,
     required String password,
   }) async {
-    print("singin");
+    print("on singin");
     Response resp = await _http.post(
         Uri.parse('http://localhost:8080/kientrucphanmem/public/login'),
         headers: <String, String>{
@@ -40,13 +40,14 @@ class AuthRemoteDataSourceImpl {
         },
         body: jsonEncode(
             <String, String>{"username": username, "password": password}));
-
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body);
-      final Map<String, dynamic> data = Map.castFrom(json['data']);
-      print(data);
-      _storeUser = UserModel.fromJson(data);
-      return _storeUser;
+      if (json['code'] == 200) {
+        final Map<String, dynamic> data = Map.castFrom(json['data']);
+        print(data);
+        _storeUser = UserModel.fromJson(data);
+        return _storeUser;
+      }
     }
     print("fail");
     throw Exception('Failed to sign in');

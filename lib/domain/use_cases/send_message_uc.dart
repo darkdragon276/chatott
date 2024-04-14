@@ -5,11 +5,17 @@ class SendMessageUC {
 
   SendMessageUC(this.repository);
 
-  Future<void> call(int conversationId, String message) async {
+  Future<void> call(
+      {required int userId,
+      required String content,
+      required int conversationId,
+      required String sessionId}) async {
     try {
       return await repository.sendMessage(
+        userId: userId,
+        content: content,
         conversationId: conversationId,
-        message: message,
+        sessionId: sessionId,
       );
     } catch (e) {
       rethrow;

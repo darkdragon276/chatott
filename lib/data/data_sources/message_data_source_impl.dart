@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -10,76 +11,91 @@ class MessageDataSourceImpl {
   static List<MessageModel> _storeListMessage = [];
 
   static late StompClient stompClient;
+  static late StreamController<List<MessageModel>> streamController;
 
-  void onMessageReceived(StompFrame frame) {
-    Iterable listJson = jsonDecode(frame.body!);
-    _storeListMessage =
-        listJson.map((message) => MessageModel.fromJson(message)).toList();
-    print(_storeListMessage);
+  Stream<List<MessageModel>> getConversationMessage(
+      int userId, int conversationId) {
+    void onConnect(StompFrame frame) {
+      stompClient.subscribe(
+        destination: '/topic/public2',
+        callback: (StompFrame frame) {
+          // receive message from server
+          final data = jsonDecode(frame.body!);
+          if (data is Map) {
+            Map<String, dynamic> messageJson = jsonDecode(frame.body!);
+            print("messageJson: $messageJson");
+            if (messageJson['type'] == 'LEAVE') {
+              return;
+            }
+            _storeListMessage.add(MessageModel.fromJson(messageJson));
+            streamController.add(_storeListMessage.reversed.toList());
+          } else if (data is List) {
+            Iterable listJson = jsonDecode(frame.body!);
+            _storeListMessage = listJson
+                .map((message) => MessageModel.fromJson(message))
+                .toList();
+            print("messagesJson: $_storeListMessage");
+            streamController.add(_storeListMessage.reversed.toList());
+          }
+        },
+      );
+
+      stompClient.send(
+        destination: '/app/chat.register2',
+        body: jsonEncode(<String, Object>{
+          "msgFrom": userId,
+          "type": "JOIN",
+          "conversationId": conversationId,
+        }),
+      );
+    }
+
+    void connectSocket() {
+      print("userId: $userId; conversationId: $conversationId");
+      stompClient = StompClient(
+          config: StompConfig.sockJS(
+        url: 'http://localhost:8080/websocket',
+        onConnect: onConnect,
+        onStompError: (error) => print('Error: $error'),
+        onWebSocketError: (error) => print('WebsocketError: $error'),
+      ));
+
+      if (!stompClient.connected) {
+        stompClient.activate();
+      }
+    }
+
+    void disconnectSocket() {
+      if (stompClient.connected) {
+        stompClient.deactivate();
+      }
+      _storeListMessage.clear();
+    }
+
+    streamController = StreamController<List<MessageModel>>(
+      onListen: () => connectSocket(),
+      onCancel: () => disconnectSocket(),
+      onPause: () => print("Pause"),
+      onResume: () => print("Resume"),
+    );
+    return streamController.stream;
   }
 
-  void onConnect(StompFrame frame, int userId, int conversationId) {
-    stompClient.subscribe(
-      destination: '/topic/public2',
-      callback: onMessageReceived,
-    );
-
+  Future<void> sendMessage(
+      int userId, String content, int conversationId, String sessionId) async {
     stompClient.send(
-      destination: '/app/chat.register2',
+      destination: '/app/chat.send2',
       body: jsonEncode(<String, Object>{
-        "msgFrom": userId,
-        "type": "JOIN",
-        "conversationId": conversationId,
+        'msgFrom': userId,
+        'content': content,
+        'type': 'CHAT',
+        'conversationId': conversationId,
+        'sessionId': sessionId,
       }),
     );
   }
 
-  void connectSocket(int userId, int conversationId) {
-    print("userId: $userId; conversationId: $conversationId");
-    stompClient = StompClient(
-        config: StompConfig.sockJS(
-      url: 'http://localhost:8080/websocket',
-      onConnect: (StompFrame frame) => onConnect(frame, userId, conversationId),
-      onStompError: (error) => print('Error: $error'),
-      onWebSocketError: (error) => print('WebsocketError: $error'),
-    ));
-
-    if (!stompClient.connected) {
-      stompClient.activate();
-    }
-  }
-
-  void disconnectSocket() {
-    if (stompClient.connected) {
-      stompClient.deactivate();
-    }
-  }
-
-  Future<void> sendMessage(String message, int conversationId) async {
-    MessageModel newMessage = MessageModel(
-      id: Random().nextInt(100),
-      sender: SenderModel(
-        id: 1,
-        firstName: 'Ngo Quoc',
-        lastName: 'Minh1',
-        avatar: 'https://picsum.photos/id/300/200/200',
-      ),
-      content: message,
-      status: 'read',
-      lastTime: 1655648403000,
-    );
-    _storeListMessage.add(newMessage);
-  }
-
-  Future<void> deleteMessage(String messageId) async {
+  Future<void> deleteMessage(int messageId) async {
     _storeListMessage.removeWhere((element) => element.id == messageId);
-  }
-
-  Stream<MessageModel> getConversationMessage(int conversationId) {
-    if (conversationId == 1) {
-      return Stream.fromIterable(_storeListMessage.reversed);
-    } else {
-      return Stream.empty();
-    }
   }
 }

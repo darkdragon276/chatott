@@ -7,6 +7,7 @@ class MessageModel extends Message {
     required super.content,
     required super.status,
     required super.lastTime,
+    required super.sessionId,
   });
 
   Message toEntity() {
@@ -18,14 +19,26 @@ class MessageModel extends Message {
       id: json['id'],
       sender: SenderModel(
         id: json['msgFrom'],
-        firstName: json['sender'],
+        firstName: "",
         lastName: json['sender'],
-        avatar: 'https://picsum.photos/id/300/200/200',
+        avatar: 'https://picsum.photos/id/${json['id'] * 2}/200/200',
       ),
       content: json['content'],
       status: 'read',
       lastTime: json['createdDate'],
+      sessionId: json['sessionId'],
     );
+  }
+
+  static Map<String, dynamic> toJson(
+      String userName, String content, int conversationId, int sessionId) {
+    return {
+      'msgFrom': userName,
+      'content': content,
+      'type': 'CHAT',
+      'conversationId': conversationId,
+      'sessionId': sessionId,
+    };
   }
 }
 

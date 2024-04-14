@@ -6,9 +6,10 @@ class StreamGetConversationMessageUC {
 
   StreamGetConversationMessageUC(this.repository);
 
-  Stream<Message> call(int conversationId) {
+  Stream<List<Message>> call(int userId, int conversationId) {
     try {
-      return repository.getConservationMessage(conversationId: conversationId);
+      return repository.getConservationMessage(
+          userId: userId, conversationId: conversationId);
     } catch (e) {
       rethrow;
     }

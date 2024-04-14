@@ -27,12 +27,8 @@ class ChatBoxScreen extends StatefulWidget {
 
 class _ChatBoxScreenState extends State<ChatBoxScreen> {
   List<types.Message> _messages = [];
-  final entity.Sender _sender = entity.Sender(
-    id: 1,
-    lastName: 'Doe',
-    firstName: 'John',
-    avatar: 'https://ui-avatars.com/api/?name=John+Doe',
-  );
+  final entity.Sender _sender =
+      entity.Sender.fromUser(AuthRemoteDataSourceImpl().user);
   late int _conversationId;
   late int _userId;
   late MessageDataSourceImpl _dataSource;
@@ -47,7 +43,6 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
   @override
   void dispose() {
-    _dataSource.disconnectSocket();
     super.dispose();
   }
 
@@ -202,34 +197,23 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
   }
 
   void _handleSendPressed(types.PartialText message) {
-    final textMessage = types.TextMessage(
-      author: _sender.toChatTypeUser(),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      text: message.text,
+    SendMessageUC(_repository).call(
+      userId: _sender.id,
+      content: message.text,
+      conversationId: _conversationId,
+      sessionId: _messages[0].roomId!,
     );
-    SendMessageUC(_repository).call(_conversationId, message.text);
-    _addMessage(textMessage);
   }
 
-  void _loadMessages(int conversationId, int userId) async {
-    if (conversationId == -1) return;
-    StreamGetConversationMessageUC(_repository)
-        .call(conversationId)
-        .map((message) => message.toTextMessage())
-        .toList()
-        .then((value) {
-      final messages = value.toList();
-      _messages = messages;
-    });
+  Stream<List<entity.Message>> _loadMessages(int userId, int conversationId) {
+    return StreamGetConversationMessageUC(_repository)
+        .call(userId, conversationId);
   }
 
   @override
   Widget build(BuildContext context) {
     _conversationId = widget.conversationId;
     _userId = AuthRemoteDataSourceImpl().user.id!;
-    _dataSource.connectSocket(_userId, _conversationId);
-    _loadMessages(_conversationId, _userId);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -240,32 +224,41 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
         title: Text("Chat Box"),
         centerTitle: true,
       ),
-      body: Chat(
-        messages: _messages,
-        onAttachmentPressed: _handleAttachmentPressed,
-        onMessageTap: _handleMessageTap,
-        onPreviewDataFetched: _handlePreviewDataFetched,
-        onSendPressed: _handleSendPressed,
-        showUserAvatars: true,
-        showUserNames: true,
-        user: _sender.toChatTypeUser(),
-        theme: const DefaultChatTheme(
-          inputBackgroundColor: Colors.white,
-          backgroundColor: Color.fromRGBO(187, 222, 251, 1),
-          attachmentButtonIcon: Icon(
-            Icons.more_horiz_outlined,
-            color: Color.fromRGBO(66, 66, 66, 1),
-          ),
-          inputTextColor: Colors.grey,
-          primaryColor: Color.fromARGB(255, 68, 172, 241),
-          secondaryColor: Colors.white,
-          seenIcon: Text(
-            'read',
-            style: TextStyle(
-              fontSize: 10.0,
+      body: StreamBuilder<List<entity.Message>>(
+        stream: _loadMessages(_userId, _conversationId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            // print(snapshot.data);
+            _messages = snapshot.data!.map((e) => e.toTextMessage()).toList();
+          }
+          return Chat(
+            messages: _messages,
+            onAttachmentPressed: _handleAttachmentPressed,
+            onMessageTap: _handleMessageTap,
+            onPreviewDataFetched: _handlePreviewDataFetched,
+            onSendPressed: _handleSendPressed,
+            showUserAvatars: true,
+            showUserNames: true,
+            user: _sender.toChatTypeUser(),
+            theme: const DefaultChatTheme(
+              inputBackgroundColor: Colors.white,
+              backgroundColor: Color.fromRGBO(187, 222, 251, 1),
+              attachmentButtonIcon: Icon(
+                Icons.more_horiz_outlined,
+                color: Color.fromRGBO(66, 66, 66, 1),
+              ),
+              inputTextColor: Colors.grey,
+              primaryColor: Color.fromARGB(255, 68, 172, 241),
+              secondaryColor: Colors.white,
+              seenIcon: Text(
+                'read',
+                style: TextStyle(
+                  fontSize: 10.0,
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

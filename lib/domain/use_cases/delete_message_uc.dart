@@ -5,7 +5,7 @@ class DeleteMessageUC {
 
   DeleteMessageUC(this.repository);
 
-  Future<void> call(String messageId) async {
+  Future<void> call(int messageId) async {
     try {
       return await repository.deleteMessage(
         messageId: messageId,

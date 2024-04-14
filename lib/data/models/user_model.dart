@@ -20,7 +20,7 @@ class UserModel extends User {
       phoneNumber: json['phoneNumber'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      // photoURL: json['photoURL'], TODO: uncomment this line
+      photoURL: 'https://picsum.photos/id/${json['id'] * 5}/200/200',
       jwt: json['jwt'],
     );
   }

@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-      } on ArgumentError {
+      } on Exception {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
