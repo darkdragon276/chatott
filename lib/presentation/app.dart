@@ -3,6 +3,8 @@ import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/screens/home_screen.dart';
 import 'package:chatott/presentation/screens/login_screen.dart';
 import 'package:chatott/presentation/screens/signup_screen.dart';
+import 'package:chatott/presentation/screens/home_screen_web.dart';
+
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -21,7 +23,8 @@ class App extends StatelessWidget {
         routes: {
           '/': (context) => const LoginScreen(),
           '/signup': (context) => const SignupScreen(),
-          '/home': (context) => const HomeScreen(),
+          '/home': (context) => const HomeScreenWeb(),
+          // '/home': (context) => const HomeScreen(),
         });
   }
 }

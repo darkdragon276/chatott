@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/chat_users.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key});
+  const MessagePage({super.key, required this.fontSize});
+
+  final double fontSize;
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -22,36 +24,32 @@ class _MessagePageState extends State<MessagePage> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
+                excludeHeaderSemantics: false,
+                toolbarHeight: 0,
                 snap: true,
                 floating: true,
                 forceElevated: true,
                 backgroundColor: Colors.white,
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TabBar.secondary(
-                      splashFactory: NoSplash.splashFactory,
-                      indicatorColor: Colors.grey[800],
-                      unselectedLabelColor: Colors.grey[500],
-                      labelColor: Colors.grey[800],
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.start,
-                      tabs: [
-                        Tab(
-                            child: Text(
-                          'Ưu tiên',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        )),
-                        Tab(
-                            child: Text('Khác',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20))),
-                      ],
-                    ),
-                  ),
+                bottom: TabBar(
+                  splashFactory: NoSplash.splashFactory,
+                  indicatorColor: Colors.grey[800],
+                  unselectedLabelColor: Colors.grey[500],
+                  labelColor: Colors.grey[800],
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  tabs: [
+                    Tab(
+                        child: Text(
+                      'Ưu tiên',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: super.widget.fontSize),
+                    )),
+                    Tab(
+                        child: Text('Khác',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: super.widget.fontSize))),
+                  ],
                 ),
               )
             ];

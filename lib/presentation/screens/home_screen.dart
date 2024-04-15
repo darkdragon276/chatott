@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     late Widget child;
     switch (_index) {
       case 0:
-        child = MessagePage();
+        child = MessagePage(fontSize: 20,);
       case 1:
         child = DirectoryPage();
       case 2:
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 4:
         child = PersonalPage();
       default:
-        child = MessagePage();
+        child = MessagePage(fontSize: 20,);
     }
     return Scaffold(
       backgroundColor: Colors.grey[200],
