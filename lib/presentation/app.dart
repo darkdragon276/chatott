@@ -14,17 +14,37 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const LoginScreen(),
-          '/signup': (context) => const SignupScreen(),
-          '/home': (context) => const HomeScreenWeb(),
-          // '/home': (context) => const HomeScreen(),
-        });
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/',
+      onGenerateRoute: (RouteSettings settings) {
+        final args = settings.arguments;
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            );
+          case '/signup':
+            return MaterialPageRoute(
+              builder: (context) => const SignupScreen(),
+            );
+          case '/home':
+            return MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            );
+          case '/chat':
+            return MaterialPageRoute(
+              builder: (context) => ChatBoxScreen(conversationId: args as int),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            );
+        }
+      },
+    );
   }
 }

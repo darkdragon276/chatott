@@ -1,37 +1,58 @@
-import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
-import 'package:chatott/data/models/auth_user_model.dart';
+import 'dart:convert';
 
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  static const fakeUser = AuthUserModel(
-    id: 'fake-user-id',
-    email: 'fake-user-email',
-    name: 'fake-user-name',
-  );
+import 'package:chatott/data/models/user_model.dart';
+import 'package:http/http.dart';
 
-  @override
-  Stream<AuthUserModel?> get user {
-    return Stream.value(fakeUser);
+class AuthRemoteDataSourceImpl {
+  static Client _http = Client();
+  static UserModel _storeUser = UserModel.empty;
+
+  UserModel get user {
+    return _storeUser;
   }
 
-  @override
-  Future<AuthUserModel> signUpWithEmailAndPassword({
-    required String email,
+  Future<UserModel> signUp(UserModel user) async {
+    Response resp = await _http.post(
+        Uri.parse('http://localhost:8080/kientrucphanmem/public/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(user.toJson()));
+    if (resp.statusCode == 200) {
+      print('success');
+      print(user.toJson());
+      _storeUser = user;
+      return user;
+    }
+    print("fail");
+    throw Exception('Failed to sign up');
+  }
+
+  Future<UserModel> signIn({
+    required String username,
     required String password,
   }) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return fakeUser;
+    print("on singin");
+    Response resp = await _http.post(
+        Uri.parse('http://localhost:8080/kientrucphanmem/public/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{"username": username, "password": password}));
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body);
+      if (json['code'] == 200) {
+        final Map<String, dynamic> data = Map.castFrom(json['data']);
+        print(data);
+        _storeUser = UserModel.fromJson(data);
+        return _storeUser;
+      }
+    }
+    print("fail");
+    throw Exception('Failed to sign in');
   }
 
-  @override
-  Future<AuthUserModel> signInWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return fakeUser;
-  }
-
-  @override
   Future<void> signOut() async {
     throw UnimplementedError();
   }

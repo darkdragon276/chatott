@@ -1,4 +1,4 @@
-import 'package:chatott/domain/repositories/auth_repositories.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class SignOutUseCase {
   final AuthRepository authRepository;
@@ -8,8 +8,8 @@ class SignOutUseCase {
   Future<void> call() async {
     try {
       await authRepository.signOut();
-    } catch (error) {
-      throw Exception(error);
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -1,37 +1,31 @@
-import 'package:chatott/data/data_sources/auth_remote_data_source.dart';
-import 'package:chatott/domain/entities/auth_user.dart';
-import 'package:chatott/domain/repositories/auth_repositories.dart';
+import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
+import 'package:chatott/data/models/user_model.dart';
+import 'package:chatott/domain/entities/user.dart';
+import 'package:chatott/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
+  final AuthRemoteDataSourceImpl remoteDataSource;
 
   const AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Stream<AuthUser> get authUser {
-    return remoteDataSource.user.map((authUserModel) =>
-        authUserModel == null ? AuthUser.empty : authUserModel.toEntity());
+  User get storeUser {
+    return remoteDataSource.user.toEntity();
   }
 
   @override
-  Future<AuthUser> signUp({
-    required String email,
-    required String password,
-  }) async {
-    final authModel = await remoteDataSource.signUpWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+  Future<User> signUp(User user) async {
+    final authModel = await remoteDataSource.signUp(UserModel.fromEntity(user));
     return authModel.toEntity();
   }
 
   @override
-  Future<AuthUser> signIn({
-    required String email,
+  Future<User> signIn({
+    required String username,
     required String password,
   }) async {
-    final authModel = await remoteDataSource.signInWithEmailAndPassword(
-      email: email,
+    final authModel = await remoteDataSource.signIn(
+      username: username,
       password: password,
     );
     return authModel.toEntity();
