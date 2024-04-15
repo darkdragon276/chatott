@@ -25,6 +25,18 @@ class UserModel extends User {
     );
   }
 
+  factory UserModel.fromJsonWithoutJwt(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      username: json['username'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      photoURL: 'https://picsum.photos/id/${json['id'] * 2}/200/200',
+    );
+  }
+
   factory UserModel.fromEntity(User user) {
     return UserModel(
       id: user.id,

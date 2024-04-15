@@ -15,18 +15,22 @@ class ConversationDataSourceImpl {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $userJWT',
         });
-    if (resp.statusCode == 200) {
-      final json = jsonDecode(resp.body);
-      Iterable listJson = json['data'];
-      _storeListConversation = listJson
-          .map((conversation) =>
-              ConversationModel.fromJson(conversation['conversation']))
-          .toList();
-      print('success');
-      return _storeListConversation;
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to get conversation');
     }
-    print("fail");
-    throw Exception('Failed to sign up');
+
+    final json = jsonDecode(resp.body);
+    if (json['code'] != 200) {
+      throw Exception('Failed to get conversation');
+    }
+
+    Iterable listJson = json['data'];
+    _storeListConversation = listJson
+        .map((conversation) =>
+            ConversationModel.fromJson(conversation['conversation']))
+        .toList();
+    print('success');
+    return _storeListConversation;
   }
 
   Future<ConversationModel> createConversation(
