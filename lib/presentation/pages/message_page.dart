@@ -6,11 +6,13 @@ import 'package:chatott/domain/repositories/conversation_repository.dart';
 import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key, required this.fontSize});
+  const MessagePage({super.key, required this.fontSize, required this.isMobile});
 
   final double fontSize;
+  final bool isMobile;
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -84,16 +86,16 @@ class _MessagePageState extends State<MessagePage> {
   void initState() {
     super.initState();
     print("initState");
-    _remoteDataSource = ConversationDataSourceImpl();
-    _repository =
-        ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
-    GetAllConversationUseCase(repository: _repository)
-        .call(AuthRemoteDataSourceImpl().user.jwt!)
-        .then((value) {
-      setState(() {
-        _conversations = value;
-      });
-    });
+    // _remoteDataSource = ConversationDataSourceImpl();
+    // _repository =
+    //     ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
+    // GetAllConversationUseCase(repository: _repository)
+    //     .call(AuthRemoteDataSourceImpl().user.jwt!)
+    //     .then((value) {
+    //   setState(() {
+    //     _conversations = value;
+    //   });
+    // });
   }
 
   @override
@@ -105,11 +107,43 @@ class _MessagePageState extends State<MessagePage> {
             return <Widget>[
               SliverAppBar(
                 excludeHeaderSemantics: false,
-                toolbarHeight: 0,
+                toolbarHeight: super.widget.isMobile ? 0 : 40,
                 snap: true,
                 floating: true,
                 forceElevated: true,
+                pinned: true,
                 backgroundColor: Colors.white,
+                title: super.widget.isMobile ? 
+                SizedBox(height: 1,)
+                :
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: SizedBox(
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 220,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Tìm kiếm',
+                              prefixIcon: Icon(Icons.search),
+                            )
+                          ),
+                        ),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.person_add_alt_1_outlined),
+                        alignment: Alignment.center,
+                        iconSize: 20,),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.group_add_outlined),
+                        alignment: Alignment.center,
+                        iconSize: 20,)
+                      ],
+                    )
+                  ),
+                ),
                 bottom: TabBar(
                   splashFactory: NoSplash.splashFactory,
                   indicatorColor: Colors.grey[800],

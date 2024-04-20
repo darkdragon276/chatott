@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 15,
                         ),
-                    controller: _emailController,
+                    controller: _usernameController,
                   ),
                   const SizedBox(height: 10),
                   TextField(
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () =>
-                        _login(context, _emailController.text, _passwordController.text),
+                        _login(context, _usernameController.text, _passwordController.text),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.symmetric(vertical: 16),

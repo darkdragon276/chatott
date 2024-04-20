@@ -25,7 +25,7 @@ class App extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
+              builder: (context) => const HomeScreenWeb(),
             );
           case '/signup':
             return MaterialPageRoute(
