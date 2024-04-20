@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+
+class WebState extends ChangeNotifier {
+  WebState({required this.conversationID});
+
+  int indexNav = 0;
+  int indexChat = 0;
+  int conversationID = 1;
+
+  List indexInfo() {
+    return [indexNav, indexChat];
+  }
+
+  void updateNav(int newNavIndex) {
+    indexNav = newNavIndex;
+    notifyListeners();
+  }
+
+  void updateChat(int newChatIndex) {
+    indexChat = newChatIndex;
+    notifyListeners();
+  }
+
+  void updateConvID(int newConvID) {
+    conversationID = newConvID;
+    notifyListeners();
+  }
+}
+
+class WebInheritedWid extends InheritedNotifier<WebState> {
+  WebInheritedWid({
+    super.key,
+    super.notifier,
+    required super.child,
+  });
+
+  static WebInheritedWid? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<WebInheritedWid>();
+  }
+
+  static WebInheritedWid of(BuildContext context) {
+    //static function allow us to call the class without initialize it.
+    final WebInheritedWid? result = maybeOf(context);
+    assert(result != null, 'No Webnotifier found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(WebInheritedWid oldWidget) {
+    // print("${notifier.indexNav} and ${oldWidget.notifier.indexNav}");
+    return (notifier != oldWidget.notifier);
+    // throw UnimplementedError();
+  }
+}

@@ -13,6 +13,18 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    Widget homeLayout() {
+      return LayoutBuilder( 
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 550) {
+          return HomeScreenWeb();
+        } else {
+          return HomeScreen();
+        }
+      });
+    }
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -25,7 +37,7 @@ class App extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(
-              builder: (context) => const HomeScreenWeb(),
+              builder: (context) => const LoginScreen(),
             );
           case '/signup':
             return MaterialPageRoute(
@@ -33,11 +45,11 @@ class App extends StatelessWidget {
             );
           case '/home':
             return MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => homeLayout(),
             );
           case '/chat':
             return MaterialPageRoute(
-              builder: (context) => ChatBoxScreen(conversationId: args as int),
+              builder: (context) => ChatBoxScreen(conversationId: args as int, isMobile: true,),
             );
           default:
             return MaterialPageRoute(

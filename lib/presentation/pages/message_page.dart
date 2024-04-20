@@ -7,6 +7,7 @@ import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:chatott/presentation/widgets/web_state.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key, required this.fontSize, required this.isMobile});
@@ -86,16 +87,16 @@ class _MessagePageState extends State<MessagePage> {
   void initState() {
     super.initState();
     print("initState");
-    // _remoteDataSource = ConversationDataSourceImpl();
-    // _repository =
-    //     ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
-    // GetAllConversationUseCase(repository: _repository)
-    //     .call(AuthRemoteDataSourceImpl().user.jwt!)
-    //     .then((value) {
-    //   setState(() {
-    //     _conversations = value;
-    //   });
-    // });
+    _remoteDataSource = ConversationDataSourceImpl();
+    _repository =
+        ConversationRepositoryImpl(remoteDataSource: _remoteDataSource);
+    GetAllConversationUseCase(repository: _repository)
+        .call(AuthRemoteDataSourceImpl().user.jwt!)
+        .then((value) {
+      setState(() {
+        _conversations = value;
+      });
+    });
   }
 
   @override
@@ -107,6 +108,7 @@ class _MessagePageState extends State<MessagePage> {
             return <Widget>[
               SliverAppBar(
                 excludeHeaderSemantics: false,
+                automaticallyImplyLeading: false, // Remove the back button
                 toolbarHeight: super.widget.isMobile ? 0 : 40,
                 snap: true,
                 floating: true,
@@ -189,8 +191,13 @@ class _MessagePageState extends State<MessagePage> {
                           isMessageRead: _conversations[index].status == 'read',
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, '/chat',
+                          if (super.widget.isMobile) {
+                            Navigator.pushNamed(context, '/chat',
                               arguments: _conversations[index].id);
+                          } else {
+                            WebInheritedWid.of(context).notifier!.updateConvID(_conversations[index].id);
+                          }
+                          
                         },
                       ),
                   separatorBuilder: (BuildContext context, int index) =>
