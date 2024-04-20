@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:chatott/domain/entities/conversation.dart';
 
 class WebState extends ChangeNotifier {
-  WebState({required this.conversationID});
-
   int indexNav = 0;
   int indexChat = 0;
-  int conversationID = 1;
+  Conversation conversation;
+  
+  WebState({required this.conversation});
 
+  
   List indexInfo() {
     return [indexNav, indexChat];
   }
@@ -21,8 +23,8 @@ class WebState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateConvID(int newConvID) {
-    conversationID = newConvID;
+  void updateConversation(Conversation newConversation) {
+    conversation = newConversation;
     notifyListeners();
   }
 }

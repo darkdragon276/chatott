@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:chatott/presentation/widgets/web_state.dart';
+import 'package:chatott/domain/entities/conversation.dart';
 
 class ConversationInfo extends StatefulWidget {
-  const ConversationInfo({
-    super.key,
-  });
+  const ConversationInfo({super.key, required this.conversation});
+
+  final Conversation conversation;
 
   @override
   State<ConversationInfo> createState() => _ConversationInfoState();
@@ -14,6 +16,7 @@ class _ConversationInfoState extends State<ConversationInfo> {
   List<String> titleNames = ["Ảnh/Video", "File", "Link", "Thiết lập bảo mật"];
   ExpansionTile dummyExpansionTile(String titleName, bool isExpanded) {
     return ExpansionTile(
+      shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         child: Align(
@@ -71,7 +74,9 @@ class _ConversationInfoState extends State<ConversationInfo> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: CircleAvatar(
-                  backgroundColor: Colors.red,
+                  // backgroundColor: Colors.red,
+                  backgroundImage: NetworkImage(
+                      "https://picsum.photos/id/${super.widget.conversation.id * 5}/200/200"),
                   radius: 30,
                 ),
               ),
@@ -79,8 +84,12 @@ class _ConversationInfoState extends State<ConversationInfo> {
                 height: 5,
               ),
               Text(
-                "John Wick",
-                style: TextStyle(fontSize: 20, fontFamily: "Ariel"),
+                super.widget.conversation.listUsername.join(", "),
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Ariel",
+                    overflow: TextOverflow.ellipsis),
               ),
               SizedBox(
                 height: 5,
@@ -128,7 +137,78 @@ class _ConversationInfoState extends State<ConversationInfo> {
                 thickness: 10,
                 color: Colors.grey[200],
               ),
-              dummyExpansionTile("Thiết lập bảo mật", isOpen[3]),
+              ExpansionTile(
+                initiallyExpanded: true,
+                shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+                title: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Thiết lập bảo mật",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+                //  isExpanded: isExpanded,
+                children: [
+                  Center(
+                      child: Column(
+                    children: [
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: Icon(Icons.timer_sharp, color: Colors.grey),
+                        title: Text('Tin nhắn tự xóa'),
+                        subtitle: Text('Không bao giờ'),
+                        // trailing:
+                        //     Icon(Icons.chevron_right_outlined, color: Colors.blueAccent),
+                        onTap: () {
+                          print('Tin nhắn tự xóa');
+                        },
+                      ),
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: Icon(Icons.visibility_off, color: Colors.grey),
+                        title: Text('Ẩn trò chuyện'),
+                        // subtitle: Text('Không bao giờ'),
+                        trailing:
+                            Icon(Icons.toggle_off_outlined, color: Colors.grey),
+                        onTap: () {
+                          print('Ẩn trò chuyện');
+                        },
+                      ),
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: Icon(Icons.warning_amber, color: Colors.grey),
+                        title: Text('Báo xấu'),
+                        // subtitle: Text('Không bao giờ'),
+                        // trailing:
+                        //     Icon(Icons.chevron_right_outlined, color: Colors.blueAccent),
+                        onTap: () {
+                          print('Báo xấu');
+                        },
+                      ),
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: Icon(Icons.delete_outline_outlined, color: Colors.red),
+                        title: Text('Xóa lịch sử trò chuyện',
+                        style: TextStyle(color: Colors.red),),
+                        // subtitle: Text('Không bao giờ'),
+                        // trailing:
+                        //     Icon(Icons.chevron_right_outlined, color: Colors.blueAccent),
+                        onTap: () {
+                          print('Xóa lịch sử trò chuyện');
+                        },
+                      ),
+                    ],
+                  )),
+                ],
+              )
             ],
           ),
         ])

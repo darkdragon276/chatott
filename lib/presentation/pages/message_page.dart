@@ -195,7 +195,7 @@ class _MessagePageState extends State<MessagePage> {
                             Navigator.pushNamed(context, '/chat',
                               arguments: _conversations[index].id);
                           } else {
-                            WebInheritedWid.of(context).notifier!.updateConvID(_conversations[index].id);
+                            WebInheritedWid.of(context).notifier!.updateConversation(_conversations[index]);
                           }
                           
                         },

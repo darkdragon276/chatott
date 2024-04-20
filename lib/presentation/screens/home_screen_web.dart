@@ -3,9 +3,11 @@ import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:chatott/presentation/pages/message_page.dart';
 import 'package:chatott/presentation/pages/conversation_info_web_page.dart';
 import 'package:chatott/presentation/pages/nav_function_web_page.dart';
+import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
 import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
 import 'package:chatott/presentation/widgets/nav_web_icon.dart';
+import 'package:chatott/domain/entities/conversation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,43 +22,48 @@ class HomeScreenWeb extends StatefulWidget {
 
 class _HomeScreenWebState extends State<HomeScreenWeb> {
   // int _index = 0;
-  int oldConverID = 1;
+  Conversation oldConversation = Conversation.empty;
   var chatboxWidget = ChatBoxScreen(conversationId: 1, isMobile: false,);
+  var infoWidget = ConversationInfo(conversation: Conversation.empty,);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       body: WebInheritedWid(
-          notifier: WebState(conversationID: oldConverID),
+          notifier: WebState(conversation: oldConversation),
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 // trying to build the ChatBoxScreen only once. Because when resizing the windows, build function will be called
                 // multiple time, and if we build ChatBoxScreen everytime the build function re-run, we will make multiple
                 // connection to the database, and in some cases the app will break due to timeout, failed connection!
-            if (WebInheritedWid.of(context).notifier!.conversationID != oldConverID) {
+            if (WebInheritedWid.of(context).notifier!.conversation.id != oldConversation.id) {
               chatboxWidget = ChatBoxScreen(
                   conversationId:
-                      WebInheritedWid.of(context).notifier!.conversationID,
+                      WebInheritedWid.of(context).notifier!.conversation.id,
                       isMobile: false,);
-              oldConverID =
-                  WebInheritedWid.of(context).notifier!.conversationID;
+              infoWidget = ConversationInfo(conversation: WebInheritedWid.of(context).notifier!.conversation);
+              oldConversation =
+                  WebInheritedWid.of(context).notifier!.conversation;
+              // print("Changed");
             } else {
+              // print("NO changed");
               chatboxWidget = chatboxWidget;
+              infoWidget = infoWidget;
             }
-            print("old id $oldConverID - true  id: ${WebInheritedWid.of(context).notifier!.conversationID}");
+            print("old id ${oldConversation.id} - true  id: ${WebInheritedWid.of(context).notifier!.conversation.id}");
             if (constraints.maxWidth > 1200) {
               return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    NavFunction(),
+                    NavFunction(isMobile: false,),
                     Expanded(
                       child: chatboxWidget,
                     ),
                     SizedBox(
                       width: 350,
-                      child: ConversationInfo(),
+                      child: infoWidget,
                     )
 
                     // NavBar(),
@@ -66,7 +73,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    NavFunction(),
+                    NavFunction(isMobile: false,),
                     Expanded(
                       child: chatboxWidget,
                     ),
@@ -78,9 +85,10 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    Expanded(
-                      child: chatboxWidget,
-                    ),
+                    NavFunction(isMobile: true,),
+                    // Expanded(
+                    //   child: chatboxWidget,
+                    // ),
 
                     // NavBar(),
                   ]);
