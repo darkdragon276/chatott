@@ -23,8 +23,13 @@ class HomeScreenWeb extends StatefulWidget {
 class _HomeScreenWebState extends State<HomeScreenWeb> {
   // int _index = 0;
   Conversation oldConversation = Conversation.empty;
-  var chatboxWidget = ChatBoxScreen(conversationId: 1, isMobile: false,);
-  var infoWidget = ConversationInfo(conversation: Conversation.empty,);
+  var chatboxWidget = ChatBoxScreen(
+    conversationId: 1,
+    isMobile: false,
+  );
+  var infoWidget = ConversationInfo(
+    conversation: Conversation.empty,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +39,19 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
           notifier: WebState(conversation: oldConversation),
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                // trying to build the ChatBoxScreen only once. Because when resizing the windows, build function will be called
-                // multiple time, and if we build ChatBoxScreen everytime the build function re-run, we will make multiple
-                // connection to the database, and in some cases the app will break due to timeout, failed connection!
-            if (WebInheritedWid.of(context).notifier!.conversation.id != oldConversation.id) {
+            // trying to build the ChatBoxScreen only once. Because when resizing the windows, build function will be called
+            // multiple time, and if we build ChatBoxScreen everytime the build function re-run, we will make multiple
+            // connection to the database, and in some cases the app will break due to timeout, failed connection!
+            if (WebInheritedWid.of(context).notifier!.conversation.id !=
+                oldConversation.id) {
               chatboxWidget = ChatBoxScreen(
-                  conversationId:
-                      WebInheritedWid.of(context).notifier!.conversation.id,
-                      isMobile: false,);
-              infoWidget = ConversationInfo(conversation: WebInheritedWid.of(context).notifier!.conversation);
+                conversationId:
+                    WebInheritedWid.of(context).notifier!.conversation.id,
+                isMobile: false,
+              );
+              infoWidget = ConversationInfo(
+                  conversation:
+                      WebInheritedWid.of(context).notifier!.conversation);
               oldConversation =
                   WebInheritedWid.of(context).notifier!.conversation;
               // print("Changed");
@@ -51,20 +60,38 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               chatboxWidget = chatboxWidget;
               infoWidget = infoWidget;
             }
-            print("old id ${oldConversation.id} - true  id: ${WebInheritedWid.of(context).notifier!.conversation.id}");
+            print(
+                "old id ${oldConversation.id} - true  id: ${WebInheritedWid.of(context).notifier!.conversation.id}");
             if (constraints.maxWidth > 1200) {
               return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    NavFunction(isMobile: false,),
-                    Expanded(
-                      child: chatboxWidget,
+                    NavFunction(
+                      isMobile: false,
                     ),
-                    SizedBox(
-                      width: 350,
-                      child: infoWidget,
-                    )
+                    Expanded(
+                      child: oldConversation == Conversation.empty ? Container(
+                        color: const Color.fromARGB(255, 173, 205, 255),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(200),
+                            child: Text("Chào mừng đến với Zalo!",
+                            style: TextStyle(fontSize: 100, color: Colors.white),
+                            textAlign: TextAlign.center,),
+                          ),
+                        ),)
+                      :
+                      chatboxWidget,
+                    ),
+                    oldConversation == Conversation.empty
+                        ? SizedBox(
+                            width: 1,
+                          )
+                        : SizedBox(
+                            width: 350,
+                            child: infoWidget,
+                          )
 
                     // NavBar(),
                   ]);
@@ -73,7 +100,9 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    NavFunction(isMobile: false,),
+                    NavFunction(
+                      isMobile: false,
+                    ),
                     Expanded(
                       child: chatboxWidget,
                     ),
@@ -85,7 +114,9 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     NavBar(),
-                    NavFunction(isMobile: true,),
+                    NavFunction(
+                      isMobile: true,
+                    ),
                     // Expanded(
                     //   child: chatboxWidget,
                     // ),
