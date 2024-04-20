@@ -56,4 +56,28 @@ class AuthRemoteDataSourceImpl {
   Future<void> signOut() async {
     throw UnimplementedError();
   }
+
+  Future<List<UserModel>> getAllUser(String userJWT) async {
+    Response resp = await _http.get(
+        Uri.parse('http://localhost:8080/kientrucphanmem/user/get-all-user'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $userJWT',
+        });
+
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to get user list');
+    }
+
+    final json = jsonDecode(resp.body);
+    if (json['code'] != 200) {
+      throw Exception('Failed to get user list');
+    }
+
+    Iterable listJson = json['data'];
+    List<UserModel> listUser =
+        listJson.map((user) => UserModel.fromJson(user)).toList();
+    print('listUser: ${listUser.toString()}');
+    return listUser;
+  }
 }

@@ -11,4 +11,6 @@ abstract class AuthRepository {
   });
 
   Future<void> signOut();
+
+  Future<List<User>> getAllUser(String userJWT);
 }

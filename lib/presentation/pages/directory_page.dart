@@ -1,3 +1,6 @@
+import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
+import 'package:chatott/data/repositories/auth_repository_impl.dart';
+import 'package:chatott/domain/entities/user.dart' as entity;
 import 'package:flutter/material.dart';
 
 class DirectoryPage extends StatefulWidget {
@@ -8,6 +11,24 @@ class DirectoryPage extends StatefulWidget {
 }
 
 class _DirectoryPageState extends State<DirectoryPage> {
+  List<entity.User> _listUsers = [];
+  late AuthRemoteDataSourceImpl _remoteSource;
+  late AuthRepositoryImpl _authRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    _remoteSource = AuthRemoteDataSourceImpl();
+    _authRepository = AuthRepositoryImpl(remoteDataSource: _remoteSource);
+    _authRepository.getAllUser(_remoteSource.user.jwt!).then((value) {
+      setState(() {
+        _listUsers = value;
+      });
+    });
+  }
+
+  void _onTapUser(entity.User user) {}
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -82,25 +103,32 @@ class _DirectoryPageState extends State<DirectoryPage> {
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: 15,
+                          itemCount:
+                              _listUsers.isNotEmpty ? _listUsers.length : 0,
                           itemBuilder: (BuildContext context, int index) =>
-                              Container(
-                                  height: 70,
-                                  alignment: Alignment.center,
-                                  color: Colors.white,
-                                  child: ListTile(
-                                    tileColor: Colors.white,
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          'https://picsum.photos/60/60'),
-                                    ),
-                                    title: Text('Nguyễn Văn A'),
-                                    trailing:
-                                        Wrap(spacing: 12, children: <Widget>[
-                                      Icon(Icons.phone_in_talk_outlined),
-                                      Icon(Icons.video_camera_front_outlined)
-                                    ]),
-                                  ))),
+                              GestureDetector(
+                                  onTap: () => _onTapUser(_listUsers[index]),
+                                  child: Container(
+                                      height: 70,
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      child: ListTile(
+                                        tileColor: Colors.white,
+                                        leading: CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              _listUsers[index].photoURL!),
+                                        ),
+                                        title: Text(
+                                            "${_listUsers[index].firstName} ${_listUsers[index].lastName}"),
+                                        trailing: Wrap(
+                                            spacing: 12,
+                                            children: <Widget>[
+                                              Icon(
+                                                  Icons.phone_in_talk_outlined),
+                                              Icon(Icons
+                                                  .video_camera_front_outlined)
+                                            ]),
+                                      )))),
                     ],
                   )),
               const Text("Nhóm"),

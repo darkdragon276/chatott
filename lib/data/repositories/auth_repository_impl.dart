@@ -35,4 +35,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() async {
     await remoteDataSource.signOut();
   }
+
+  @override
+  Future<List<User>> getAllUser(String userJWT) {
+    return remoteDataSource
+        .getAllUser(userJWT)
+        .then((value) => value.map((e) => e.toEntity()).toList());
+  }
 }
