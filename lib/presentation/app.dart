@@ -3,6 +3,8 @@ import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/screens/home_screen.dart';
 import 'package:chatott/presentation/screens/login_screen.dart';
 import 'package:chatott/presentation/screens/signup_screen.dart';
+import 'package:chatott/presentation/screens/home_screen_web.dart';
+
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -11,6 +13,18 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    Widget homeLayout() {
+      return LayoutBuilder( 
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 550) {
+          return HomeScreenWeb();
+        } else {
+          return HomeScreen();
+        }
+      });
+    }
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,11 +45,11 @@ class App extends StatelessWidget {
             );
           case '/home':
             return MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => homeLayout(),
             );
           case '/chat':
             return MaterialPageRoute(
-              builder: (context) => ChatBoxScreen(conversationId: args as int),
+              builder: (context) => ChatBoxScreen(conversationId: args as int, isMobile: true,),
             );
           default:
             return MaterialPageRoute(

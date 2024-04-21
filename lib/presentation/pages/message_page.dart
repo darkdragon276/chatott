@@ -6,9 +6,14 @@ import 'package:chatott/domain/repositories/conversation_repository.dart';
 import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:chatott/presentation/widgets/web_state.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key});
+  const MessagePage({super.key, required this.fontSize, required this.isMobile});
+
+  final double fontSize;
+  final bool isMobile;
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -102,36 +107,65 @@ class _MessagePageState extends State<MessagePage> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
+                excludeHeaderSemantics: false,
+                automaticallyImplyLeading: false, // Remove the back button
+                toolbarHeight: super.widget.isMobile ? 0 : 40,
                 snap: true,
                 floating: true,
                 forceElevated: true,
+                pinned: true,
                 backgroundColor: Colors.white,
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TabBar.secondary(
-                      splashFactory: NoSplash.splashFactory,
-                      indicatorColor: Colors.grey[800],
-                      unselectedLabelColor: Colors.grey[500],
-                      labelColor: Colors.grey[800],
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.start,
-                      tabs: [
-                        Tab(
-                            child: Text(
-                          'Ưu tiên',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        )),
-                        Tab(
-                            child: Text('Khác',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20))),
+                title: super.widget.isMobile ? 
+                SizedBox(height: 1,)
+                :
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: SizedBox(
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 220,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Tìm kiếm',
+                              prefixIcon: Icon(Icons.search),
+                            )
+                          ),
+                        ),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.person_add_alt_1_outlined),
+                        alignment: Alignment.center,
+                        iconSize: 20,),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.group_add_outlined),
+                        alignment: Alignment.center,
+                        iconSize: 20,)
                       ],
-                    ),
+                    )
                   ),
+                ),
+                bottom: TabBar(
+                  splashFactory: NoSplash.splashFactory,
+                  indicatorColor: Colors.grey[800],
+                  unselectedLabelColor: Colors.grey[500],
+                  labelColor: Colors.grey[800],
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  tabs: [
+                    Tab(
+                        child: Text(
+                      'Ưu tiên',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: super.widget.fontSize),
+                    )),
+                    Tab(
+                        child: Text('Khác',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: super.widget.fontSize))),
+                  ],
                 ),
               )
             ];
@@ -157,8 +191,13 @@ class _MessagePageState extends State<MessagePage> {
                           isMessageRead: _conversations[index].status == 'read',
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, '/chat',
+                          if (super.widget.isMobile) {
+                            Navigator.pushNamed(context, '/chat',
                               arguments: _conversations[index].id);
+                          } else {
+                            WebInheritedWid.of(context).notifier!.updateConversation(_conversations[index]);
+                          }
+                          
                         },
                       ),
                   separatorBuilder: (BuildContext context, int index) =>
