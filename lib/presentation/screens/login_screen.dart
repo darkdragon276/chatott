@@ -44,9 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             _header(context),
             LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints
-              ) {
-                if (constraints.maxWidth > 600){
+              builder: (BuildContext context, BoxConstraints constraints) {
+                if (constraints.maxWidth > 600) {
                   return _inputFieldWeb(context);
                 } else {
                   return _inputField(context);
@@ -136,60 +135,55 @@ class _LoginScreenState extends State<LoginScreen> {
         margin: EdgeInsets.all(10),
         surfaceTintColor: Colors.white,
         child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 50.0,
-              horizontal: 20.0 
-              ),
+            padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: "Username",
-                        fillColor: Colors.white,
-                        prefixIcon: const Icon(Icons.person),
-                        filled: true,
-                        ),
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                    controller: _usernameController,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Username",
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.person),
+                    filled: true,
                   ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: const Icon(Icons.lock),
-                    ),
-                    style: TextStyle(
-                          fontSize: 15,
-                          ),
-                    obscureText: true,
-                    controller: _passwordController,
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () =>
-                        _login(context, _usernameController.text, _passwordController.text),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.blueAccent,
-                    ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white),
-                    ),
-                  )
-                ],
-              )
-            ), 
-          ),
-      );
+                  controller: _usernameController,
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    fillColor: Colors.white,
+                    filled: true,
+                    prefixIcon: const Icon(Icons.lock),
+                  ),
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                  obscureText: true,
+                  controller: _passwordController,
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () => _login(context, _usernameController.text,
+                      _passwordController.text),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: Colors.blueAccent,
+                  ),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   _forgotPassword(context) {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-
-class navIcon extends StatelessWidget {
-  const navIcon({
+class NavIcon extends StatelessWidget {
+  const NavIcon({
     super.key,
     required this.normalIcon,
     required this.selectedIcon,

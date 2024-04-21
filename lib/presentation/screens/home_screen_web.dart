@@ -1,17 +1,10 @@
-import 'package:chatott/presentation/widgets/top_bar.dart';
-import 'package:chatott/presentation/widgets/chat_card.dart';
-import 'package:chatott/presentation/pages/message_page.dart';
 import 'package:chatott/presentation/pages/conversation_info_web_page.dart';
 import 'package:chatott/presentation/pages/nav_function_web_page.dart';
 import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
 import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
-import 'package:chatott/presentation/widgets/nav_web_icon.dart';
 import 'package:chatott/domain/entities/conversation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class HomeScreenWeb extends StatefulWidget {
   const HomeScreenWeb({super.key});
@@ -71,18 +64,22 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                       isMobile: false,
                     ),
                     Expanded(
-                      child: oldConversation == Conversation.empty ? Container(
-                        color: const Color.fromARGB(255, 173, 205, 255),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(200),
-                            child: Text("Chào mừng đến với Zalo!",
-                            style: TextStyle(fontSize: 100, color: Colors.white),
-                            textAlign: TextAlign.center,),
-                          ),
-                        ),)
-                      :
-                      chatboxWidget,
+                      child: oldConversation == Conversation.empty
+                          ? Container(
+                              color: const Color.fromARGB(255, 173, 205, 255),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(200),
+                                  child: Text(
+                                    "Chào mừng đến với Zalo!",
+                                    style: TextStyle(
+                                        fontSize: 100, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : chatboxWidget,
                     ),
                     oldConversation == Conversation.empty
                         ? SizedBox(

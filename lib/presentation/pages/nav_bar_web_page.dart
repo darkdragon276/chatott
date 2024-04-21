@@ -47,42 +47,54 @@ class _NavBarState extends State<NavBar> {
                       ),
                     );
                   },
-                  style: MenuStyle(alignment: Alignment.centerRight, 
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                  style: MenuStyle(
+                      alignment: Alignment.centerRight,
+                      backgroundColor:
+                          MaterialStatePropertyAll<Color>(Colors.white)),
                   menuChildren: <MenuItemButton>[
                     MenuItemButton(
                       // onPressed: () {print("Nâng cấp tài khoản");},
-                      
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
-                          child: Text('John Cena',
+
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
+                      child: Text('John Cena',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Nâng cấp tài khoản");
                       },
                       child: Text('Nâng cấp tài khoản'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Hồ sơ của bạn");
                       },
                       child: Text('Hồ sơ của bạn'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Cài đặt");
                       },
                       child: Text('Cài đặt'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);
@@ -91,7 +103,7 @@ class _NavBarState extends State<NavBar> {
                     ),
                   ],
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.chat_outlined),
                   selectedIcon: Icon(Icons.chat),
                   index: 0,
@@ -104,7 +116,7 @@ class _NavBarState extends State<NavBar> {
                     );
                   },
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.contact_page_outlined),
                   selectedIcon: Icon(Icons.contact_page),
                   index: 1,
@@ -117,7 +129,7 @@ class _NavBarState extends State<NavBar> {
                     );
                   },
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.check_box_outlined),
                   selectedIcon: Icon(Icons.check_box),
                   index: 2,
@@ -130,7 +142,7 @@ class _NavBarState extends State<NavBar> {
                     );
                   },
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.videocam_outlined),
                   selectedIcon: Icon(Icons.videocam),
                   index: 3,
@@ -148,21 +160,21 @@ class _NavBarState extends State<NavBar> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.cloud_queue),
                   selectedIcon: Icon(Icons.cloud_queue),
                   index: 1,
                   currentIndex: 0,
                   onIconPress: () {},
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.crop_free_outlined),
                   selectedIcon: Icon(Icons.crop_free_outlined),
                   index: 1,
                   currentIndex: 0,
                   onIconPress: () {},
                 ),
-                navIcon(
+                NavIcon(
                   normalIcon: Icon(Icons.home_repair_service_outlined),
                   selectedIcon: Icon(Icons.home_repair_service),
                   index: 1,
@@ -172,7 +184,7 @@ class _NavBarState extends State<NavBar> {
                 MenuAnchor(
                   builder: (BuildContext context, MenuController controller,
                       Widget? child) {
-                    return navIcon(
+                    return NavIcon(
                       normalIcon: Icon(Icons.settings_outlined),
                       selectedIcon: Icon(Icons.settings),
                       index: 1,
@@ -195,7 +207,9 @@ class _NavBarState extends State<NavBar> {
                   alignmentOffset: Offset(10, 10),
                   menuChildren: <MenuItemButton>[
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Thông tin tài khoản");
                       },
@@ -205,7 +219,9 @@ class _NavBarState extends State<NavBar> {
                       ),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Cài đặt");
                       },
@@ -213,7 +229,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Cài đặt"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Dữ liệu");
                       },
@@ -221,7 +239,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Dữ liệu"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Công cụ");
                       },
@@ -229,7 +249,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Công cụ"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Ngôn ngữ");
                       },
@@ -237,7 +259,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Ngôn ngữ"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Giới thiệu");
                       },
@@ -245,7 +269,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Giới thiệu"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);

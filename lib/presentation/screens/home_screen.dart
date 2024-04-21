@@ -22,7 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
     late Widget child;
     switch (_index) {
       case 0:
-        child = MessagePage(fontSize: 20, isMobile: true,);
+        child = MessagePage(
+          fontSize: 20,
+          isMobile: true,
+        );
       case 1:
         child = DirectoryPage();
       case 2:

@@ -3,9 +3,7 @@ import 'package:chatott/presentation/widgets/web_state.dart';
 import 'package:chatott/presentation/pages/message_page.dart';
 
 class NavFunction extends StatefulWidget {
-  const NavFunction({
-    super.key, required this.isMobile
-  });
+  const NavFunction({super.key, required this.isMobile});
   final bool isMobile;
   @override
   State<NavFunction> createState() => _NavFunctionState();
@@ -33,11 +31,11 @@ class _NavFunctionState extends State<NavFunction> {
         child = Placeholder();
     }
 
-    return super.widget.isMobile ? Expanded(child: child) 
-    : SizedBox(
-        // color: Colors.black,
-        width: 335,
-        child: child);
+    return super.widget.isMobile
+        ? Expanded(child: child)
+        : SizedBox(
+            // color: Colors.black,
+            width: 335,
+            child: child);
   }
 }
-

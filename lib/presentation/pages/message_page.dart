@@ -2,15 +2,14 @@ import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/data_sources/conversation_data_source_impl.dart';
 import 'package:chatott/data/repositories/conversation_repository_impl.dart';
 import 'package:chatott/domain/entities/conversation.dart';
-import 'package:chatott/domain/repositories/conversation_repository.dart';
 import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
 import 'package:chatott/presentation/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key, required this.fontSize, required this.isMobile});
+  const MessagePage(
+      {super.key, required this.fontSize, required this.isMobile});
 
   final double fontSize;
   final bool isMobile;
@@ -115,37 +114,42 @@ class _MessagePageState extends State<MessagePage> {
                 forceElevated: true,
                 pinned: true,
                 backgroundColor: Colors.white,
-                title: super.widget.isMobile ? 
-                SizedBox(height: 1,)
-                :
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: SizedBox(
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 220,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Tìm kiếm',
-                              prefixIcon: Icon(Icons.search),
-                            )
-                          ),
-                        ),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.person_add_alt_1_outlined),
-                        alignment: Alignment.center,
-                        iconSize: 20,),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.group_add_outlined),
-                        alignment: Alignment.center,
-                        iconSize: 20,)
-                      ],
-                    )
-                  ),
-                ),
+                title: super.widget.isMobile
+                    ? SizedBox(
+                        height: 1,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: SizedBox(
+                            height: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 220,
+                                  child: TextField(
+                                      decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Tìm kiếm',
+                                    prefixIcon: Icon(Icons.search),
+                                  )),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.person_add_alt_1_outlined),
+                                  alignment: Alignment.center,
+                                  iconSize: 20,
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.group_add_outlined),
+                                  alignment: Alignment.center,
+                                  iconSize: 20,
+                                )
+                              ],
+                            )),
+                      ),
                 bottom: TabBar(
                   splashFactory: NoSplash.splashFactory,
                   indicatorColor: Colors.grey[800],
@@ -158,7 +162,8 @@ class _MessagePageState extends State<MessagePage> {
                         child: Text(
                       'Ưu tiên',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: super.widget.fontSize),
+                          fontWeight: FontWeight.bold,
+                          fontSize: super.widget.fontSize),
                     )),
                     Tab(
                         child: Text('Khác',
@@ -193,11 +198,12 @@ class _MessagePageState extends State<MessagePage> {
                         onTap: () {
                           if (super.widget.isMobile) {
                             Navigator.pushNamed(context, '/chat',
-                              arguments: _conversations[index].id);
+                                arguments: _conversations[index].id);
                           } else {
-                            WebInheritedWid.of(context).notifier!.updateConversation(_conversations[index]);
+                            WebInheritedWid.of(context)
+                                .notifier!
+                                .updateConversation(_conversations[index]);
                           }
-                          
                         },
                       ),
                   separatorBuilder: (BuildContext context, int index) =>

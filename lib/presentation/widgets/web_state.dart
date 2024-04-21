@@ -5,10 +5,9 @@ class WebState extends ChangeNotifier {
   int indexNav = 0;
   int indexChat = 0;
   Conversation conversation;
-  
+
   WebState({required this.conversation});
 
-  
   List indexInfo() {
     return [indexNav, indexChat];
   }

@@ -20,7 +20,8 @@ import 'package:mime/mime.dart';
 class ChatBoxScreen extends StatefulWidget {
   final int conversationId;
   final bool isMobile;
-  const ChatBoxScreen({super.key, required this.conversationId, required this.isMobile});
+  const ChatBoxScreen(
+      {super.key, required this.conversationId, required this.isMobile});
 
   @override
   State<ChatBoxScreen> createState() => _ChatBoxScreenState();
@@ -217,11 +218,16 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
     _userId = AuthRemoteDataSourceImpl().user.id!;
     return Scaffold(
       appBar: AppBar(
-        leading: super.widget.isMobile ? IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }) : SizedBox(width: 1,height: 1,),
+        leading: super.widget.isMobile
+            ? IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
+            : SizedBox(
+                width: 1,
+                height: 1,
+              ),
         title: Text("Chat Box"),
         centerTitle: true,
       ),
