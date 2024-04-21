@@ -8,9 +8,6 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    permissions:
-      contents: read
-      pages: write
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
