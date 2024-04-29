@@ -183,10 +183,12 @@ class _MessagePageState extends State<MessagePage> {
                       _conversations.isNotEmpty ? _conversations.length : 0,
                   padding: EdgeInsets.all(0),
                   itemBuilder: (BuildContext context, int index) => ChatCard(
+                        selected: super.widget.isMobile ? false 
+                        : _conversations[index].id == WebInheritedWid.of(context).notifier!.indexChat,
                         data: ChatCardData(
                           name: _conversations[index].listUsername.join(", "),
                           messageText:
-                              _conversations[index].listUsername.length > 1
+                              _conversations[index].listUsername.length > 2
                                   ? "Group"
                                   : "Single",
                           imageUrl:
@@ -198,11 +200,15 @@ class _MessagePageState extends State<MessagePage> {
                         onTap: () {
                           if (super.widget.isMobile) {
                             Navigator.pushNamed(context, '/chat',
-                                arguments: _conversations[index].id);
+                                arguments: [_conversations[index].id, 
+                                _conversations[index].listUsername.join(", ")] );
                           } else {
                             WebInheritedWid.of(context)
                                 .notifier!
                                 .updateConversation(_conversations[index]);
+                            WebInheritedWid.of(context)
+                                .notifier!
+                                .updateChat(_conversations[index].id);
                           }
                         },
                       ),
@@ -213,6 +219,7 @@ class _MessagePageState extends State<MessagePage> {
               ListView.separated(
                 itemCount: _chatUsers.length,
                 itemBuilder: (BuildContext context, int index) => ChatCard(
+                    selected: false,
                     data: ChatCardData(
                       name: _chatUsers[index].name,
                       messageText: _chatUsers[index].messageText,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
 import 'package:chatott/presentation/pages/message_page.dart';
+import 'package:chatott/presentation/pages/directory_func_web_page.dart';
 
 class NavFunction extends StatefulWidget {
   const NavFunction({super.key, required this.isMobile});
@@ -22,11 +23,15 @@ class _NavFunctionState extends State<NavFunction> {
         );
       // child = Placeholder();
       case 1:
-        child = Placeholder();
+        child = DictionaryFunc();
       case 2:
-        child = Placeholder();
+        child = Expanded(
+          child: Center(child: Text("Todo list", style: TextStyle(fontSize: 30),),)
+        );
       case 3:
-        child = Placeholder();
+         child = Expanded(
+          child: Center(child: Text("Video", style: TextStyle(fontSize: 30),),)
+        );;
       default:
         child = Placeholder();
     }

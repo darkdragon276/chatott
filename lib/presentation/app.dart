@@ -33,7 +33,7 @@ class App extends StatelessWidget {
       ),
       initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
-        final args = settings.arguments;
+        var args = settings.arguments;
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(
@@ -48,8 +48,11 @@ class App extends StatelessWidget {
               builder: (context) => homeLayout(),
             );
           case '/chat':
+          print(args);
+            var myargs = args as List;
             return MaterialPageRoute(
-              builder: (context) => ChatBoxScreen(conversationId: args as int, isMobile: true,),
+              builder: (context) => ChatBoxScreen(conversationId: myargs[0] as int, 
+                    conversationName: myargs[1] as String, isMobile: true,),
             );
           default:
             return MaterialPageRoute(

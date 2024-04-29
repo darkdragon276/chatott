@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 class ChatCard extends StatelessWidget {
   final ChatCardData data;
   final VoidCallback onTap;
-  const ChatCard({super.key, required this.data, required this.onTap});
+  final bool selected;
+  const ChatCard({super.key, required this.selected, required this.data, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: Colors.white,
+        color: selected ? Color.fromARGB(255, 225, 237, 252) : Colors.white,
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(
           children: <Widget>[

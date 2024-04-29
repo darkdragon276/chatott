@@ -1,7 +1,11 @@
+import 'package:chatott/data/data_sources/conversation_data_source_impl.dart';
+import 'package:chatott/data/repositories/conversation_repository_impl.dart';
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/repositories/auth_repository_impl.dart';
 import 'package:chatott/domain/entities/user.dart' as entity;
 import 'package:flutter/material.dart';
+import 'package:chatott/domain/entities/conversation.dart' as entity;
+import 'package:chatott/domain/use_cases/create_conversation_uc.dart';
 
 class DirectoryPage extends StatefulWidget {
   const DirectoryPage({super.key});
@@ -12,17 +16,64 @@ class DirectoryPage extends StatefulWidget {
 
 class _DirectoryPageState extends State<DirectoryPage> {
   List<entity.User> _listUsers = [];
-  late AuthRemoteDataSourceImpl _remoteSource;
+  List<entity.Conversation> _listConversation = [];
+  late AuthRemoteDataSourceImpl _remoteAuthSource;
+  late ConversationDataSourceImpl _remoteConverSource;
+  late ConversationRepositoryImpl _converRepository;
   late AuthRepositoryImpl _authRepository;
+
+  entity.Conversation searchConversation(entity.User friendUser) {
+    // print(friendUser.username);
+    for (entity.Conversation conversation in _listConversation) {
+      if (conversation.listUsername.length < 3 && 
+      conversation.listUsername.contains(friendUser.username)) {
+        print("Found conversation ${conversation.id}");
+        return conversation;
+      }
+    }
+    return entity.Conversation.empty;
+  }
+
+  void openChatbox(entity.Conversation conversation) {
+    Navigator.pushNamed(context, '/chat', arguments: [conversation.id, 
+                                conversation.listUsername.join(", ")]);
+  }
+
+  void toConversation(entity.User friendUser) async {
+    entity.Conversation conversation = searchConversation(friendUser);
+    if (conversation != entity.Conversation.empty) {
+      openChatbox(conversation);
+    } else {
+      List<String> userList = [
+        _remoteAuthSource.user.id.toString(),
+        friendUser.id.toString()
+      ];
+      conversation =
+          await CreateConversationUseCase(_converRepository).call(userList, "");
+      openChatbox(conversation);
+      print("Created a NEW conversation");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _remoteSource = AuthRemoteDataSourceImpl();
-    _authRepository = AuthRepositoryImpl(remoteDataSource: _remoteSource);
-    _authRepository.getAllUser(_remoteSource.user.jwt!).then((value) {
+    _remoteAuthSource = AuthRemoteDataSourceImpl();
+    _authRepository = AuthRepositoryImpl(remoteDataSource: _remoteAuthSource);
+    _authRepository.getAllUser(_remoteAuthSource.user.jwt!).then((value) {
       setState(() {
         _listUsers = value;
+      });
+    });
+    _remoteConverSource = ConversationDataSourceImpl();
+    _converRepository =
+        ConversationRepositoryImpl(remoteDataSource: _remoteConverSource);
+    // getAllconversation related to the current user.
+    _converRepository
+        .getAllConversation(_remoteAuthSource.user.jwt!)
+        .then((value) {
+      setState(() {
+        _listConversation = value;
       });
     });
   }
@@ -106,8 +157,12 @@ class _DirectoryPageState extends State<DirectoryPage> {
                           itemCount:
                               _listUsers.isNotEmpty ? _listUsers.length : 0,
                           itemBuilder: (BuildContext context, int index) =>
-                              GestureDetector(
-                                  onTap: () => _onTapUser(_listUsers[index]),
+                              _remoteAuthSource.user.username == _listUsers[index].username ? 
+                              SizedBox(height: 1,)
+                              : GestureDetector(
+                                  onTap: () async {
+                                      toConversation(_listUsers[index]);
+                                    },
                                   child: Container(
                                       height: 70,
                                       alignment: Alignment.center,
@@ -119,7 +174,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                                               _listUsers[index].photoURL!),
                                         ),
                                         title: Text(
-                                            "${_listUsers[index].firstName} ${_listUsers[index].lastName}"),
+                                            " ${_listUsers[index].username} "),
                                         trailing: Wrap(
                                             spacing: 12,
                                             children: <Widget>[
