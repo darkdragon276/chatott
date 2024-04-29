@@ -47,42 +47,54 @@ class _NavBarState extends State<NavBar> {
                       ),
                     );
                   },
-                  style: MenuStyle(alignment: Alignment.centerRight, 
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                  style: MenuStyle(
+                      alignment: Alignment.centerRight,
+                      backgroundColor:
+                          MaterialStatePropertyAll<Color>(Colors.white)),
                   menuChildren: <MenuItemButton>[
                     MenuItemButton(
                       // onPressed: () {print("Nâng cấp tài khoản");},
-                      
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
-                          child: Text('John Cena',
+
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
+                      child: Text('John Cena',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Nâng cấp tài khoản");
                       },
                       child: Text('Nâng cấp tài khoản'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Hồ sơ của bạn");
                       },
                       child: Text('Hồ sơ của bạn'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Cài đặt");
                       },
                       child: Text('Cài đặt'),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);
@@ -195,7 +207,9 @@ class _NavBarState extends State<NavBar> {
                   alignmentOffset: Offset(10, 10),
                   menuChildren: <MenuItemButton>[
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Thông tin tài khoản");
                       },
@@ -205,7 +219,9 @@ class _NavBarState extends State<NavBar> {
                       ),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Cài đặt");
                       },
@@ -213,7 +229,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Cài đặt"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Dữ liệu");
                       },
@@ -221,7 +239,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Dữ liệu"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Công cụ");
                       },
@@ -229,7 +249,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Công cụ"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Ngôn ngữ");
                       },
@@ -237,7 +259,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Ngôn ngữ"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         print("Giới thiệu");
                       },
@@ -245,7 +269,9 @@ class _NavBarState extends State<NavBar> {
                       child: Text("Giới thiệu"),
                     ),
                     MenuItemButton(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.white)),
                       onPressed: () {
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);

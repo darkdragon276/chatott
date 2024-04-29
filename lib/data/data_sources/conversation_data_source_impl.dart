@@ -20,7 +20,10 @@ class ConversationDataSourceImpl {
     }
 
     final json = jsonDecode(resp.body);
-    if (json['code'] != 200) {
+    if (json['code'] == 400) {
+      return [];
+    }
+    else if (json['code'] != 200) {
       throw Exception('Failed to get conversation');
     }
 
@@ -53,7 +56,7 @@ class ConversationDataSourceImpl {
       return conversationModel;
     }
     print("fail");
-    throw Exception('Failed to sign up');
+    throw Exception('Failed to create conversation');
   }
 
   Future<void> deleteConversation({

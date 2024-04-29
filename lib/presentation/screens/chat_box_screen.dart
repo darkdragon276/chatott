@@ -19,8 +19,10 @@ import 'package:mime/mime.dart';
 
 class ChatBoxScreen extends StatefulWidget {
   final int conversationId;
+  final String conversationName;
   final bool isMobile;
-  const ChatBoxScreen({super.key, required this.conversationId, required this.isMobile});
+  const ChatBoxScreen({super.key, required this.conversationId, required this.conversationName, 
+  required this.isMobile});
 
   @override
   State<ChatBoxScreen> createState() => _ChatBoxScreenState();
@@ -202,7 +204,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
       userId: _sender.id,
       content: message.text,
       conversationId: _conversationId,
-      sessionId: _messages[0].roomId!,
+      sessionId: (_messages.isNotEmpty) ? _messages[0].roomId! : _conversationId.toString(),
     );
   }
 
@@ -222,7 +224,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             }) : SizedBox(width: 1,height: 1,),
-        title: Text("Chat Box"),
+        title: Text("Chat Box of ${super.widget.conversationName}"),
         centerTitle: true,
       ),
       body: StreamBuilder<List<entity.Message>>(

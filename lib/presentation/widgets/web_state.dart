@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:chatott/domain/entities/conversation.dart';
 
 class WebState extends ChangeNotifier {
-  int indexNav = 0;
+  int indexNav = 1;
   int indexChat = 0;
   Conversation conversation;
-  
-  WebState({required this.conversation});
 
-  
+  WebState({required this.conversation, required this.indexNav, required this.indexChat});
+
   List indexInfo() {
     return [indexNav, indexChat];
   }

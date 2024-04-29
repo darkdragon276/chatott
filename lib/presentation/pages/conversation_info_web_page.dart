@@ -139,7 +139,8 @@ class _ConversationInfoState extends State<ConversationInfo> {
               ),
               ExpansionTile(
                 initiallyExpanded: true,
-                shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.white)),
                 title: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -195,9 +196,12 @@ class _ConversationInfoState extends State<ConversationInfo> {
                       ),
                       ListTile(
                         tileColor: Colors.white,
-                        leading: Icon(Icons.delete_outline_outlined, color: Colors.red),
-                        title: Text('Xóa lịch sử trò chuyện',
-                        style: TextStyle(color: Colors.red),),
+                        leading: Icon(Icons.delete_outline_outlined,
+                            color: Colors.red),
+                        title: Text(
+                          'Xóa lịch sử trò chuyện',
+                          style: TextStyle(color: Colors.red),
+                        ),
                         // subtitle: Text('Không bao giờ'),
                         // trailing:
                         //     Icon(Icons.chevron_right_outlined, color: Colors.blueAccent),
