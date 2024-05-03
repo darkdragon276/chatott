@@ -44,9 +44,11 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
           const SizedBox(height: 10),
           Text(
             'Nhạc chờ Zalo',
+            softWrap: false,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 12,
+              overflow: TextOverflow.fade
             ),
           )
         ],

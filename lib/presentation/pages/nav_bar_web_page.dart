@@ -1,3 +1,5 @@
+import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
+import 'package:chatott/data/repositories/auth_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
 import 'package:chatott/presentation/widgets/nav_web_icon.dart';
@@ -34,7 +36,11 @@ class _NavBarState extends State<NavBar> {
                           controller.open();
                         }
                       },
-                      icon: Icon(Icons.account_circle),
+                      icon: CircleAvatar(
+                          backgroundImage: NetworkImage(AuthRepositoryImpl(
+                                  remoteDataSource: AuthRemoteDataSourceImpl())
+                              .storeUser
+                              .photoURL!)),
                       style: ButtonStyle(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -58,10 +64,15 @@ class _NavBarState extends State<NavBar> {
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStatePropertyAll<Color>(Colors.white)),
-                      child: Text('John Cena',
+                      child: Text(
+                          AuthRepositoryImpl(
+                                  remoteDataSource: AuthRemoteDataSourceImpl())
+                              .storeUser
+                              .username,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
+                            fontSize: 20
                           )),
                     ),
                     MenuItemButton(

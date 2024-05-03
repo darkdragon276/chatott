@@ -50,30 +50,6 @@ class Message {
         lastTime.toString(),
       ];
 
-  types.TextMessage toTextMessage() {
-    return types.TextMessage(
-        author: sender.toChatTypeUser(),
-        id: id.toString(),
-        text: content,
-        createdAt: lastTime,
-        roomId: sessionId.toString());
-  }
-
-  static Message fromTextMessage(types.TextMessage message, String sesstionId) {
-    return Message(
-      id: int.parse(message.id),
-      sender: Sender(
-        id: int.parse(message.author.id),
-        lastName: message.author.lastName!,
-        firstName: message.author.firstName!,
-        avatar: message.author.imageUrl!,
-      ),
-      content: message.text,
-      status: 'read',
-      lastTime: message.createdAt!,
-      sessionId: sesstionId,
-    );
-  }
 }
 
 class Sender {
@@ -102,15 +78,6 @@ class Sender {
       lastName: user.lastName!,
       firstName: user.firstName!,
       avatar: user.photoURL!,
-    );
-  }
-
-  types.User toChatTypeUser() {
-    return types.User(
-      id: id.toString(),
-      firstName: firstName,
-      lastName: lastName,
-      imageUrl: avatar,
     );
   }
 }

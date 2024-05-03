@@ -38,6 +38,10 @@ class _DirectoryWebState extends State<DirectoryWeb> {
   }
 
   void openChatbox(entity.Conversation conversation) {
+    conversation.listUsername.remove(
+        AuthRepositoryImpl(remoteDataSource: AuthRemoteDataSourceImpl())
+            .storeUser
+            .username);
     WebInheritedWid.of(context).notifier!.updateConversation(conversation);
     WebInheritedWid.of(context).notifier!.updateNav(0);
     WebInheritedWid.of(context).notifier!.updateChat(conversation.id);

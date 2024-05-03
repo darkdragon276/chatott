@@ -1,16 +1,11 @@
+import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/presentation/pages/conversation_info_web_page.dart';
-import 'package:chatott/presentation/pages/nav_function_web_page.dart';
-import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
 import 'package:chatott/presentation/pages/directory_web_page.dart';
+import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
+import 'package:chatott/presentation/pages/nav_function_web_page.dart';
 import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
-import 'package:chatott/domain/entities/conversation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
-import 'package:chatott/data/repositories/auth_repository_impl.dart';
-import 'package:chatott/domain/entities/user.dart' as entity;
 
 class HomeScreenWeb extends StatefulWidget {
   const HomeScreenWeb({super.key});
@@ -92,7 +87,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 200, vertical: 0),
                                         child: Text(
-                                          "Chào mừng đến với Zalo!",
+                                          "Chào mừng đến với Zola!",
                                           softWrap: true,
                                           style: TextStyle(
                                               fontSize: 100,

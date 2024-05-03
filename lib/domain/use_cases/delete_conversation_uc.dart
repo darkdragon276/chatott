@@ -3,7 +3,7 @@ import 'package:chatott/domain/repositories/conversation_repository.dart';
 class DeleteConversationUseCase {
   final ConversationRepository repository;
 
-  DeleteConversationUseCase(this.repository);
+  DeleteConversationUseCase({required this.repository});
 
   Future<void> call(String conversationId) async {
     try {

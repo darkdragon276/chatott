@@ -25,13 +25,9 @@ class _NavFunctionState extends State<NavFunction> {
       case 1:
         child = DictionaryFunc();
       case 2:
-        child = Expanded(
-          child: Center(child: Text("Todo list", style: TextStyle(fontSize: 30),),)
-        );
+        child = Center(child: Text("Todo list", style: TextStyle(fontSize: 30),),);
       case 3:
-         child = Expanded(
-          child: Center(child: Text("Video", style: TextStyle(fontSize: 30),),)
-        );;
+         child = Center(child: Text("Video", style: TextStyle(fontSize: 30),),);
       default:
         child = Placeholder();
     }
