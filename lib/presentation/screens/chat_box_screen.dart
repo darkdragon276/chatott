@@ -280,8 +280,11 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
             onSendPressed: _handleSendPressed,
             showUserAvatars: true,
             showUserNames: true,
+            emojiEnlargementBehavior: EmojiEnlargementBehavior.multi,
             user: senderEntity2ChatTypeUser(_sender),
             theme: const DefaultChatTheme(
+              sentEmojiMessageTextStyle: TextStyle(fontFamily: "NotoEmoji", fontSize: 30),
+              receivedEmojiMessageTextStyle: TextStyle(fontFamily: "NotoEmoji", fontSize: 30),
               inputBackgroundColor: Colors.white,
               backgroundColor: Color.fromRGBO(187, 222, 251, 1),
               attachmentButtonIcon: Icon(

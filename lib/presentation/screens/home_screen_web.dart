@@ -80,23 +80,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                     WebInheritedWid.of(context).notifier!.indexNav == 0
                         ? Expanded(
                             child: oldConversation == Conversation.empty
-                                ? Container(
-                                    color: const Color.fromARGB(
-                                        255, 173, 205, 255),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 200, vertical: 0),
-                                        child: Text(
-                                          "Chào mừng đến với Zola!",
-                                          softWrap: true,
-                                          style: TextStyle(
-                                              fontSize: 100,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                                ? DummyWelcomePage()
                                 : chatboxWidget,
                           )
                         : Expanded(
@@ -125,7 +109,9 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                     ),
                     WebInheritedWid.of(context).notifier!.indexNav == 0
                         ? Expanded(
-                            child: chatboxWidget,
+                            child: oldConversation == Conversation.empty
+                                ? DummyWelcomePage()
+                                : chatboxWidget,
                           )
                         : Expanded(child: DirectoryWeb()),
 
@@ -144,10 +130,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                           )
                         : Expanded(child: DirectoryWeb()),
 
-                    // Expanded(
-                    //   child: chatboxWidget,
-                    // ),
-
                     // NavBar(),
                   ]);
             } else {
@@ -155,6 +137,33 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
             }
           })),
     ));
+  }
+}
+
+class DummyWelcomePage extends StatelessWidget {
+  const DummyWelcomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: const Color.fromARGB(
+            255, 173, 205, 255),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 200, vertical: 0),
+            child: Text(
+              "Chào mừng đến với Zola!",
+              softWrap: true,
+              style: TextStyle(
+                  fontSize: 100,
+                  color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
   }
 }
 

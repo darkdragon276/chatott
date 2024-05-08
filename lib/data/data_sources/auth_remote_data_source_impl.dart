@@ -37,10 +37,11 @@ class AuthRemoteDataSourceImpl {
         Uri.parse('http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/public/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-        },
+          },
         body: jsonEncode(
             <String, String>{"username": username, "password": password}));
     if (resp.statusCode == 200) {
+      print("I'm in here!");
       final json = jsonDecode(resp.body);
       if (json['code'] == 200) {
         final Map<String, dynamic> data = Map.castFrom(json['data']);

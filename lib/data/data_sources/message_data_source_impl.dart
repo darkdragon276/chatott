@@ -56,8 +56,15 @@ class MessageDataSourceImpl {
           config: StompConfig.sockJS(
         url: 'http://${dotenv.env["SERVER_URL"]}/websocket',
         onConnect: onConnect,
-        onStompError: (error) => print('Error: $error'),
-        onWebSocketError: (error) => print('WebsocketError: $error'),
+        onStompError: (StompFrame frame) {
+          print(
+              'A stomp error occurred in web socket connection :: ${frame.body}');
+        },
+        onWebSocketError: (dynamic frame) {
+          print(
+              'A Web socket error occurred in web socket connection :: ${frame.toString()}');
+        },
+
       ));
 
       if (!stompClient.connected) {
