@@ -35,6 +35,10 @@ class _DirectoryPageState extends State<DirectoryPage> {
   }
 
   void openChatbox(entity.Conversation conversation) {
+        conversation.listUsername.remove(
+        AuthRepositoryImpl(remoteDataSource: AuthRemoteDataSourceImpl())
+            .storeUser
+            .username);
     Navigator.pushNamed(context, '/chat', arguments: [conversation.id, 
                                 conversation.listUsername.join(", ")]);
   }

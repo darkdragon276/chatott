@@ -1,16 +1,11 @@
+import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/presentation/pages/conversation_info_web_page.dart';
-import 'package:chatott/presentation/pages/nav_function_web_page.dart';
-import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
 import 'package:chatott/presentation/pages/directory_web_page.dart';
+import 'package:chatott/presentation/pages/nav_bar_web_page.dart';
+import 'package:chatott/presentation/pages/nav_function_web_page.dart';
 import 'package:chatott/presentation/screens/chat_box_screen.dart';
 import 'package:chatott/presentation/widgets/web_state.dart';
-import 'package:chatott/domain/entities/conversation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
-import 'package:chatott/data/repositories/auth_repository_impl.dart';
-import 'package:chatott/domain/entities/user.dart' as entity;
 
 class HomeScreenWeb extends StatefulWidget {
   const HomeScreenWeb({super.key});
@@ -85,23 +80,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                     WebInheritedWid.of(context).notifier!.indexNav == 0
                         ? Expanded(
                             child: oldConversation == Conversation.empty
-                                ? Container(
-                                    color: const Color.fromARGB(
-                                        255, 173, 205, 255),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 200, vertical: 0),
-                                        child: Text(
-                                          "Chào mừng đến với Zalo!",
-                                          softWrap: true,
-                                          style: TextStyle(
-                                              fontSize: 100,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                                ? DummyWelcomePage()
                                 : chatboxWidget,
                           )
                         : Expanded(
@@ -130,7 +109,9 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                     ),
                     WebInheritedWid.of(context).notifier!.indexNav == 0
                         ? Expanded(
-                            child: chatboxWidget,
+                            child: oldConversation == Conversation.empty
+                                ? DummyWelcomePage()
+                                : chatboxWidget,
                           )
                         : Expanded(child: DirectoryWeb()),
 
@@ -149,10 +130,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                           )
                         : Expanded(child: DirectoryWeb()),
 
-                    // Expanded(
-                    //   child: chatboxWidget,
-                    // ),
-
                     // NavBar(),
                   ]);
             } else {
@@ -160,6 +137,33 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
             }
           })),
     ));
+  }
+}
+
+class DummyWelcomePage extends StatelessWidget {
+  const DummyWelcomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: const Color.fromARGB(
+            255, 173, 205, 255),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 200, vertical: 0),
+            child: Text(
+              "Chào mừng đến với Zola!",
+              softWrap: true,
+              style: TextStyle(
+                  fontSize: 100,
+                  color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
   }
 }
 

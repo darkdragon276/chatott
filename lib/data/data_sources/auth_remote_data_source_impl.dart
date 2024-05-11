@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chatott/data/models/user_model.dart';
 import 'package:http/http.dart';
 
@@ -13,7 +13,7 @@ class AuthRemoteDataSourceImpl {
 
   Future<UserModel> signUp(UserModel user) async {
     Response resp = await _http.post(
-        Uri.parse('http://localhost:8080/kientrucphanmem/public/register'),
+        Uri.parse('http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/public/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -34,13 +34,14 @@ class AuthRemoteDataSourceImpl {
   }) async {
     print("on singin");
     Response resp = await _http.post(
-        Uri.parse('http://localhost:8080/kientrucphanmem/public/login'),
+        Uri.parse('http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/public/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-        },
+          },
         body: jsonEncode(
             <String, String>{"username": username, "password": password}));
     if (resp.statusCode == 200) {
+      print("I'm in here!");
       final json = jsonDecode(resp.body);
       if (json['code'] == 200) {
         final Map<String, dynamic> data = Map.castFrom(json['data']);
@@ -59,7 +60,7 @@ class AuthRemoteDataSourceImpl {
 
   Future<List<UserModel>> getAllUser(String userJWT) async {
     Response resp = await _http.get(
-        Uri.parse('http://localhost:8080/kientrucphanmem/user/get-all-user'),
+        Uri.parse('http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/user/get-all-user'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $userJWT',

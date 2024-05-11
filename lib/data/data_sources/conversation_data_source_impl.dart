@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chatott/data/models/conversation_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 class ConversationDataSourceImpl {
@@ -10,7 +11,7 @@ class ConversationDataSourceImpl {
   Future<List<ConversationModel>> getAllConversation(String userJWT) async {
     Response resp = await _http.get(
         Uri.parse(
-            'http://localhost:8080/kientrucphanmem/user/get-all-conversation'),
+            'http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/user/get-all-conversation'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $userJWT',
@@ -39,7 +40,7 @@ class ConversationDataSourceImpl {
   Future<ConversationModel> createConversation(
       List<String> listUser, String conversationName) async {
     Response resp = await _http.post(
-        Uri.parse('http://localhost:8080/kientrucphanmem/conversation/create'),
+        Uri.parse('http://${dotenv.env["SERVER_URL"]}/kientrucphanmem/conversation/create'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

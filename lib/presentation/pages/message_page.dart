@@ -1,5 +1,6 @@
 import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/data_sources/conversation_data_source_impl.dart';
+import 'package:chatott/data/repositories/auth_repository_impl.dart';
 import 'package:chatott/data/repositories/conversation_repository_impl.dart';
 import 'package:chatott/domain/entities/conversation.dart';
 import 'package:chatott/domain/use_cases/get_all_conversation_uc.dart';
@@ -182,36 +183,46 @@ class _MessagePageState extends State<MessagePage> {
                   itemCount:
                       _conversations.isNotEmpty ? _conversations.length : 0,
                   padding: EdgeInsets.all(0),
-                  itemBuilder: (BuildContext context, int index) => ChatCard(
-                        selected: super.widget.isMobile ? false 
-                        : _conversations[index].id == WebInheritedWid.of(context).notifier!.indexChat,
-                        data: ChatCardData(
-                          name: _conversations[index].listUsername.join(", "),
-                          messageText:
-                              _conversations[index].listUsername.length > 2
-                                  ? "Group"
-                                  : "Single",
-                          imageUrl:
-                              "https://picsum.photos/id/${_conversations[index].id * 5}/200/200",
-                          time: ChatCardData.fromCurrentTime(
-                              _conversations[index].createAt),
-                          isMessageRead: _conversations[index].status == 'read',
-                        ),
-                        onTap: () {
-                          if (super.widget.isMobile) {
-                            Navigator.pushNamed(context, '/chat',
-                                arguments: [_conversations[index].id, 
-                                _conversations[index].listUsername.join(", ")] );
-                          } else {
-                            WebInheritedWid.of(context)
-                                .notifier!
-                                .updateConversation(_conversations[index]);
-                            WebInheritedWid.of(context)
-                                .notifier!
-                                .updateChat(_conversations[index].id);
-                          }
-                        },
+                  itemBuilder: (BuildContext context, int index) {
+                    _conversations[index].listUsername.remove(
+                        AuthRepositoryImpl(
+                                remoteDataSource: AuthRemoteDataSourceImpl())
+                            .storeUser
+                            .username);
+                    return ChatCard(
+                      selected: super.widget.isMobile
+                          ? false
+                          : _conversations[index].id ==
+                              WebInheritedWid.of(context).notifier!.indexChat,
+                      data: ChatCardData(
+                        name: _conversations[index].listUsername.join(", "),
+                        messageText:
+                            _conversations[index].listUsername.length > 2
+                                ? "Group"
+                                : "Single",
+                        imageUrl:
+                            "https://picsum.photos/id/${_conversations[index].id * 5}/200/200",
+                        time: ChatCardData.fromCurrentTime(
+                            _conversations[index].createAt),
+                        isMessageRead: _conversations[index].status == 'read',
                       ),
+                      onTap: () {
+                        if (super.widget.isMobile) {
+                          Navigator.pushNamed(context, '/chat', arguments: [
+                            _conversations[index].id,
+                            _conversations[index].listUsername.join(", ")
+                          ]);
+                        } else {
+                          WebInheritedWid.of(context)
+                              .notifier!
+                              .updateConversation(_conversations[index]);
+                          WebInheritedWid.of(context)
+                              .notifier!
+                              .updateChat(_conversations[index].id);
+                        }
+                      },
+                    );
+                  },
                   separatorBuilder: (BuildContext context, int index) =>
                       Container(
                         height: 1,

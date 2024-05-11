@@ -4,6 +4,7 @@ import 'package:chatott/data/data_sources/auth_remote_data_source_impl.dart';
 import 'package:chatott/data/data_sources/message_data_source_impl.dart';
 import 'package:chatott/data/repositories/message_repository_impl.dart';
 import 'package:chatott/domain/entities/message.dart' as entity;
+import 'package:chatott/domain/entities/user.dart' as entity;
 import 'package:chatott/domain/use_cases/send_message_uc.dart';
 import 'package:chatott/domain/use_cases/stream_get_conversation_message_uc.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +51,46 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
   }
 
   void _addMessage(types.Message message) {
+    List<types.Message> tempList = [];
+    tempList.add(message);
+    tempList.addAll(_messages);
     setState(() {
-      _messages.insert(0, message);
+      _messages = tempList;
     });
+  }
+
+    types.User senderEntity2ChatTypeUser(entity.Sender sender) {
+    return types.User(
+      id: sender.id.toString(),
+      firstName: sender.firstName,
+      lastName: sender.lastName,
+      imageUrl: sender.avatar,
+    );
+  }
+
+  types.TextMessage messageEntity2TextMessage(entity.Sender sender, entity.Message message) {
+    return types.TextMessage(
+        author: senderEntity2ChatTypeUser(sender),
+        id: message.id.toString(),
+        text: message.content,
+        createdAt: message.lastTime,
+        roomId: message.sessionId.toString());
+  }
+
+  entity.Message textMessage2EntityMessage(types.TextMessage message, String sesstionId) {
+    return entity.Message(
+      id: int.parse(message.id),
+      sender: entity.Sender(
+        id: int.parse(message.author.id),
+        lastName: message.author.lastName!,
+        firstName: message.author.firstName!,
+        avatar: message.author.imageUrl!,
+      ),
+      content: message.text,
+      status: 'read',
+      lastTime: message.createdAt!,
+      sessionId: sesstionId,
+    );
   }
 
   void _handleAttachmentPressed() {
@@ -100,7 +138,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
 
     if (result != null && result.files.single.path != null) {
       final message = types.FileMessage(
-        author: _sender.toChatTypeUser(),
+        author: senderEntity2ChatTypeUser(_sender),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         id: const Uuid().v4(),
         mimeType: lookupMimeType(result.files.single.path!),
@@ -125,7 +163,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
       final image = await decodeImageFromList(bytes);
 
       final message = types.ImageMessage(
-        author: _sender.toChatTypeUser(),
+        author: senderEntity2ChatTypeUser(_sender),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         height: image.height.toDouble(),
         id: const Uuid().v4(),
@@ -224,7 +262,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             }) : SizedBox(width: 1,height: 1,),
-        title: Text("Chat Box of ${super.widget.conversationName}"),
+        title: Text("Hội thoại với ${super.widget.conversationName}"),
         centerTitle: true,
       ),
       body: StreamBuilder<List<entity.Message>>(
@@ -232,7 +270,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // print(snapshot.data);
-            _messages = snapshot.data!.map((e) => e.toTextMessage()).toList();
+            _messages = snapshot.data!.map((e) => messageEntity2TextMessage(e.sender, e)).toList();
           }
           return Chat(
             messages: _messages,
@@ -242,8 +280,11 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
             onSendPressed: _handleSendPressed,
             showUserAvatars: true,
             showUserNames: true,
-            user: _sender.toChatTypeUser(),
+            emojiEnlargementBehavior: EmojiEnlargementBehavior.multi,
+            user: senderEntity2ChatTypeUser(_sender),
             theme: const DefaultChatTheme(
+              sentEmojiMessageTextStyle: TextStyle(fontFamily: "NotoEmoji", fontSize: 30),
+              receivedEmojiMessageTextStyle: TextStyle(fontFamily: "NotoEmoji", fontSize: 30),
               inputBackgroundColor: Colors.white,
               backgroundColor: Color.fromRGBO(187, 222, 251, 1),
               attachmentButtonIcon: Icon(

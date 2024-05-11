@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
@@ -84,21 +85,23 @@ class _DiaryPageState extends State<DiaryPage> {
                   ),
                 ),
               ),
-              Container(
-                  width: 300,
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Nhập bình luận',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(10),
-                    ),
-                    style: const TextStyle(fontSize: 15, color: Colors.grey),
-                  ))
+              Expanded(
+                child: Container(
+                    // width: 300,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Nhập bình luận',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(10),
+                      ),
+                      style: const TextStyle(fontSize: 15, color: Colors.grey),
+                    )),
+              )
             ],
           ),
           SizedBox(height: 10)

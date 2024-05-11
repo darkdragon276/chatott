@@ -5,6 +5,7 @@ import 'package:chatott/data/models/message_model.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MessageDataSourceImpl {
   static List<MessageModel> _storeListMessage = [];
@@ -53,10 +54,17 @@ class MessageDataSourceImpl {
       print("userId: $userId; conversationId: $conversationId");
       stompClient = StompClient(
           config: StompConfig.sockJS(
-        url: 'http://localhost:8080/websocket',
+        url: 'http://${dotenv.env["SERVER_URL"]}/websocket',
         onConnect: onConnect,
-        onStompError: (error) => print('Error: $error'),
-        onWebSocketError: (error) => print('WebsocketError: $error'),
+        onStompError: (StompFrame frame) {
+          print(
+              'A stomp error occurred in web socket connection :: ${frame.body}');
+        },
+        onWebSocketError: (dynamic frame) {
+          print(
+              'A Web socket error occurred in web socket connection :: ${frame.toString()}');
+        },
+
       ));
 
       if (!stompClient.connected) {
